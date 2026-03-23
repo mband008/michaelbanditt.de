@@ -1,26 +1,15 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Michael Banditt – Problemlöser für Prozesse, Menschen und Systeme. Profil, Arbeitsweise und Kontakt.">
-  <title>Michael Banditt - Problemlöser für Prozesse, Menschen und Systeme</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/home-page.css">
-</head>
-<body>
-  <header>
-    <nav>
-      <div class="logo">
-        <img src="images/Ewhite.png" alt="Logo Michael Banditt" width="100" height="auto">
-      </div>
-      <ul class="nav-links">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="ueber-mich.html">Über mich</a></li>
-        <li><a href="kontakt.html">Kontakt</a></li>
-      </ul>
-    </nav>
-  </header>
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = "Michael Banditt - Problemlöser für Prozesse, Menschen und Systeme";
+const description = "Michael Banditt – Problemlöser für Prozesse, Menschen und Systeme. Profil, Arbeitsweise und Kontakt.";
+const pageStyle = "home-page.css";
+---
+
+<BaseLayout {title} {description} {pageStyle}>
+  <Header active="home" />
 
   <main class="home-page-modern">
     <section class="home-hero-modern">
@@ -38,8 +27,8 @@
         </p>
 
         <div class="hero-actions">
-          <a href="kontakt.html" class="cta-button">Kontakt aufnehmen</a>
-          <a href="ueber-mich.html" class="secondary-button">Profil ansehen</a>
+          <a href="/kontakt" class="cta-button">Kontakt aufnehmen</a>
+          <a href="/ueber-mich" class="secondary-button">Profil ansehen</a>
         </div>
 
         <div class="hero-trust-list" aria-label="Schwerpunkte">
@@ -52,10 +41,10 @@
 
       <aside class="home-hero-card">
         <img
-          src="images/17883980_111742692710237_3916354174887244207_n.jpg"
+          src="/images/17883980_111742692710237_3916354174887244207_n.jpg"
           alt="Porträt von Michael Banditt"
           class="home-profile-image"
-        >
+        />
 
         <div class="hero-card-content">
           <h2>Im Kern geht es um drei Dinge</h2>
@@ -222,14 +211,11 @@
       </div>
 
       <div class="cta-panel-actions">
-        <a href="ueber-mich.html" class="secondary-button">Zur Profilseite</a>
-        <a href="kontakt.html" class="cta-button">Kontakt</a>
+        <a href="/ueber-mich" class="secondary-button">Zur Profilseite</a>
+        <a href="/kontakt" class="cta-button">Kontakt</a>
       </div>
     </section>
   </main>
 
-  <footer>
-    <p>&copy; 2026 Michael Banditt. Alle Rechte vorbehalten.</p>
-  </footer>
-</body>
-</html>
+  <Footer />
+</BaseLayout>

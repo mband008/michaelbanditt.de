@@ -1,0 +1,16 @@
+---
+const { active } = Astro.props;
+---
+
+<header>
+  <nav>
+    <div class="logo">
+      <img src="/images/Ewhite.png" alt="Logo Michael Banditt" width="100" height="auto">
+    </div>
+    <ul class="nav-links">
+      <li><a href="/" class={active === 'home' ? 'active' : ''}>Home</a></li>
+      <li><a href="/ueber-mich" class={active === 'about' ? 'active' : ''}>Über mich</a></li>
+      <li><a href="/kontakt" class={active === 'contact' ? 'active' : ''}>Kontakt</a></li>
+    </ul>
+  </nav>
+</header>

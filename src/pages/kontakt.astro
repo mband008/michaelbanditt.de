@@ -1,26 +1,15 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Kontakt zu Michael Banditt – direkter Austausch zu Prozessoptimierung, Automatisierung, Veränderungsbegleitung und Zusammenarbeit.">
-  <title>Kontakt - Michael Banditt</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/contact-page.css">
-</head>
-<body>
-  <header>
-    <nav>
-      <div class="logo">
-        <img src="images/Ewhite.png" alt="Logo Michael Banditt" width="100" height="auto">
-      </div>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="ueber-mich.html">Über mich</a></li>
-        <li><a href="kontakt.html" class="active">Kontakt</a></li>
-      </ul>
-    </nav>
-  </header>
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+export const title = "Kontakt - Michael Banditt";
+export const description = "Kontakt zu Michael Banditt – direkter Austausch zu Prozessoptimierung, Automatisierung, Veränderungsbegleitung und Zusammenarbeit.";
+export const pageStyle = "contact-page.css";
+---
+
+<BaseLayout title={title} description={description} pageStyle={pageStyle}>
+  <Header active="kontakt" />
 
   <main class="contact-page-modern">
     <section class="contact-hero-modern">
@@ -77,6 +66,7 @@
         </div>
       </aside>
     </section>
+
 
     <section class="contact-cards-grid" aria-label="Kontaktübersicht">
       <article class="contact-card">
@@ -191,8 +181,5 @@
     </section>
   </main>
 
-  <footer>
-    <p>&copy; 2026 Michael Banditt. Alle Rechte vorbehalten.</p>
-  </footer>
-</body>
-</html>
+  <Footer />
+</BaseLayout>
