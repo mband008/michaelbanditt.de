@@ -89,22 +89,33 @@ mehr; `astro check` grün.
 
 ---
 
-## M4 — CSS-Aufräumen 🟡
+## M4 — CSS-Aufräumen 🟡 ✅ ERLEDIGT
 **Ziel:** Toter Code raus, gemeinsame Bausteine zentralisiert, schlankere Stylesheets.
 
-**Ausgangslage:** `style.css` enthält überwiegend Regeln für das alte Layout
-(`.hero`, `.about-hero`, `.skill-card`, `.experience-item`, `form`, `.approach-grid` …),
-das die `*-modern`-Seiten nicht mehr nutzen. `contact-page.css` enthält ungenutzte
-Formular-Styles. `.section-eyebrow`, `.secondary-button`, `.method-item`, `.proof-strip`
-sind in allen drei Page-CSS-Dateien dupliziert.
+**Ausgangslage:** `style.css` enthielt überwiegend Regeln für das alte Layout
+(`.hero`, `.about-hero`, `.skill-card`, `.experience-item`, `form`, `.approach-grid` …).
+`contact-page.css` enthielt ungenutzte Formular-Styles. Die Page-CSS-Dateien waren per
+Copy-Paste entstanden und enthielten viel seitenfremden/toten Code sowie Duplikate.
 
-- [ ] Ungenutzte Legacy-Regeln aus `style.css` entfernen.
-- [ ] Ungenutzte Formular-Styles aus `contact-page.css` entfernen.
-- [ ] Gemeinsame Bausteine in `style.css` zentralisieren, Duplikate in Page-CSS löschen.
-- [ ] `public/styles/style_backup.css` löschen oder bewusst behalten (Entscheidung).
-- [ ] Visuell auf allen drei Seiten gegenprüfen (Desktop + Mobil).
+- [x] Ungenutzte Legacy-Regeln aus `style.css` entfernt.
+- [x] Ungenutzte Formular-/`prompt-`-Styles aus `contact-page.css` entfernt; je Page-CSS
+      sauber neu geschrieben (nur noch auf der eigenen Seite genutzte Regeln).
+- [x] Identische Bausteine `.section-eyebrow` + `.secondary-button` in `style.css`
+      zentralisiert, Duplikate in den Page-CSS gelöscht.
+- [x] `public/styles/style_backup.css` gelöscht (via git wiederherstellbar).
+- [x] Visuell auf allen Seiten gegengeprüft (Desktop 1280px + Mobil 390px).
 
-**DoD:** Keine sichtbaren Regressionen; spürbar kleinere CSS-Dateien; keine
+**Ergebnis:** CSS ~halbiert (style.css −60 %, contact −51 %, home −32 %, + 5,5 KB Backup
+weg). Regression-Check: jede genutzte Klasse weiterhin gedeckt, keine toten Regeln mehr.
+`astro check` 0 Fehler, Build grün, kein visueller Unterschied.
+
+> **Bewusste Scope-Entscheidung:** Stark verschachtelte gemeinsame Blöcke
+> (`.section-block`, `.method-item`, Heading-Gruppen) mit kleinen seitenspezifischen
+> Abweichungen wurden in den Page-Dateien belassen (kein risikoreicher Cross-File-Merge).
+> `2500-1600-max.jpg` (1,45 MB) wird jetzt von keiner CSS-Regel mehr referenziert →
+> Verwendung/Löschung gehört zu M5.
+
+**DoD:** ✅ Keine sichtbaren Regressionen; spürbar kleinere CSS-Dateien; keine
 doppelten Regel-Blöcke mehr.
 
 ---
@@ -171,7 +182,7 @@ Lighthouse-Werte dokumentiert.
 | M1 | Bilder austauschen & optimieren | 🟡 | ✅ erledigt |
 | M2 | Impressum & Datenschutz | 🟡 | ✅ erledigt |
 | M3 | Bugfixes | 🟢 | ✅ erledigt |
-| M4 | CSS-Aufräumen | 🟡 | offen |
+| M4 | CSS-Aufräumen | 🟡 | ✅ erledigt |
 | M5 | Typografie & Markenbild | 🟡 | offen |
 | M6 | Inhaltliche Schärfung | 🟡 | offen |
 | M7 | SEO, Performance & Politur | 🟡 | offen |

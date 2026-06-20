@@ -1,4 +1,4 @@
-/* Grundlegende Styles für die Website basierend auf Ihren Farben */
+/* Globale Basis-Styles (Farben, Layout, Header, Footer, geteilte Bausteine) */
 :root {
   --primary-color: #0F0F0F; /* Tiefschwarz */
   --secondary-color: #7A7A7A; /* Mittelgrau */
@@ -47,12 +47,6 @@ nav {
   align-items: center;
 }
 
-.logo h1 {
-  color: var(--accent-color);
-  font-size: 1.8rem;
-  margin-right: 1rem; /* Platz für Logo */
-}
-
 /* Navigation */
 .nav-links {
   display: flex;
@@ -72,7 +66,7 @@ nav {
   transition: var(--transition);
 }
 
-.nav-links a:hover, 
+.nav-links a:hover,
 .nav-links a.active {
   background-color: rgba(200, 161, 77, 0.1);
   color: var(--accent-color);
@@ -84,85 +78,20 @@ main {
   padding: 2rem 1rem;
 }
 
-/* Hero-Bereich */
-.hero {
-  background: linear-gradient(rgba(15, 15, 15, 0.7), rgba(15, 15, 15, 0.7)), url('../images/2500-1600-max.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  color: var(--light-color);
-  padding: 4rem 2rem;
-  border-radius: var(--border-radius);
-  text-align: center;
-  margin-bottom: 3rem;
-  box-shadow: var(--box-shadow);
-  border: 1px solid #e9ecef;
-  border-top: 5px solid var(--accent-color);
+/* Geteilte Bausteine (seitenübergreifend genutzt) */
+.section-eyebrow {
+  display: inline-block;
+  margin-bottom: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(200, 161, 77, 0.12);
+  color: var(--accent-color);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-size: 0.9rem;
 }
 
-.hero-content h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: #ffffff !important;
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  color: #ffffff !important;
-}
-
-/* About-Seite */
-.about-hero {
-  background: linear-gradient(rgba(15, 15, 15, 0.7), rgba(15, 15, 15, 0.7)), url('../images/2500-1600-max.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  color: var(--light-color);
-  padding: 3rem 2rem;
-  border-radius: var(--border-radius);
-  text-align: center;
-  margin-bottom: 3rem;
-  box-shadow: var(--box-shadow);
-  border: 1px solid #e9ecef;
-  border-top: 5px solid var(--accent-color);
-}
-
-/* Kontakt-Seite */
-.contact-hero {
-  background: linear-gradient(rgba(15, 15, 15, 0.7), rgba(15, 15, 15, 0.7)), url('../images/2500-1600-max.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  color: var(--light-color);
-  padding: 3rem 2rem;
-  border-radius: var(--border-radius);
-  text-align: center;
-  margin-bottom: 3rem;
-  box-shadow: var(--box-shadow);
-  border: 1px solid #e9ecef;
-  border-top: 5px solid var(--accent-color);
-}
-
-.hero-content h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: #ffffff !important;
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--accent-color) !important;
-}
-
-/* CTA-Button */
+/* Primärer Call-to-Action-Button */
 .cta-button {
   display: inline-block;
   background-color: var(--accent-color);
@@ -183,187 +112,24 @@ main {
   box-shadow: 0 6px 12px rgba(200, 161, 77, 0.2);
 }
 
-/* Skills-Bereich */
-.key-skills h3 {
-  text-align: center;
-  margin-bottom: 2rem;
+/* Sekundärer Button (Outline) */
+.secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.4rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
   color: var(--primary-color);
-  font-size: 2rem;
-}
-
-.skills-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-}
-
-.skill-card {
-  background: white;
-  padding: 2rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  text-align: center;
+  border: 1px solid rgba(15, 15, 15, 0.12);
   transition: var(--transition);
-  border: 1px solid #e9ecef;
 }
 
-.skill-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.skill-card h4 {
-  color: var(--accent-color);
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-}
-
-/* About-Seite */
-.about-hero {
-  background-color: white;
-  color: var(--primary-color);
-  padding: 3rem 2rem;
-  border-radius: var(--border-radius);
-  text-align: center;
-  margin-bottom: 3rem;
-  box-shadow: var(--box-shadow);
-  border: 1px solid #e9ecef;
-  border-top: 5px solid var(--accent-color);
-}
-
-.about-hero h2 {
-  color: var(--primary-color);
-  margin-bottom: 1rem;
-}
-
-.about-hero p {
-  color: var(--secondary-color);
-  font-size: 1.2rem;
-  max-width: 800px;
-  margin: 0 auto 1.5rem;
-}
-
-.about-content {
-  margin-bottom: 3rem;
-}
-
-.profile-image {
-  max-width: 300px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  display: block;
-  margin: 2rem auto;
-}
-
-.about-text h3 {
-  color: var(--primary-color);
-  margin: 2rem 0 1rem 0;
-  font-size: 1.5rem;
-}
-
-.about-text ul {
-  margin: 1rem 0;
-  padding-left: 1.5rem;
-}
-
-.about-text li {
-  margin-bottom: 0.5rem;
-}
-
-.experience {
-  margin-top: 3rem;
-}
-
-.experience h3 {
-  color: var(--primary-color);
-  text-align: center;
-  margin-bottom: 2rem;
-  font-size: 1.8rem;
-}
-
-.experience-item {
-  background: white;
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  margin-bottom: 1.5rem;
-  border-left: 5px solid var(--accent-color);
-  border: 1px solid #e9ecef;
-}
-
-.experience-item h4 {
-  color: var(--primary-color);
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
-}
-
-/* Kontakt-Seite */
-.contact-hero {
-  background-color: white;
-  color: var(--primary-color);
-  padding: 3rem 2rem;
-  border-radius: var(--border-radius);
-  text-align: center;
-  margin-bottom: 3rem;
-  box-shadow: var(--box-shadow);
-  border: 1px solid #e9ecef;
-  border-top: 5px solid var(--accent-color);
-}
-
-.contact-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.contact-info h3,
-.contact-form h3 {
-  color: var(--primary-color);
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-}
-
-.contact-info ul {
-  margin: 1rem 0;
-  padding-left: 1.5rem;
-}
-
-.contact-info li {
-  margin-bottom: 0.5rem;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-  color: var(--primary-color);
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ced4da;
-  border-radius: var(--border-radius);
-  font-family: inherit;
-  background-color: white;
-  color: var(--primary-color);
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
+.secondary-button:hover {
+  transform: translateY(-2px);
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(200, 161, 77, 0.2);
+  color: var(--accent-color);
 }
 
 /* Footer */
@@ -394,69 +160,18 @@ footer {
   color: var(--accent-color);
 }
 
-/* Approach Styles */
-.approach-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin: 2rem 0;
-}
-
-.approach-column h4 {
-  color: var(--accent-color);
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-}
-
-.approach-column h5 {
-  color: var(--primary-color);
-  margin: 1rem 0 0.5rem 0;
-  font-size: 1.1rem;
-}
-
-.approach-column ul {
-  margin: 0.5rem 0 1rem 1.5rem;
-}
-
-.approach-column li {
-  margin-bottom: 0.3rem;
-  line-height: 1.4;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
   nav {
     flex-direction: column;
     padding: 1rem;
   }
-  
+
   .nav-links {
     margin-top: 1rem;
   }
-  
+
   .nav-links li {
     margin: 0 0.5rem;
-  }
-  
-  .hero-content h2 {
-    font-size: 2rem;
-  }
-  
-  .hero-content p {
-    font-size: 1rem;
-  }
-  
-  .skills-container {
-    grid-template-columns: 1fr;
-  }
-  
-  .contact-content {
-    grid-template-columns: 1fr;
-  }
-  
-  /* Mobile Layout for Approach Section */
-  .approach-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
   }
 }
