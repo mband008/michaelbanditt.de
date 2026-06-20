@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
+import portraitHeadshot from '../assets/portrait-headshot.png';
 
 export const title = "Kontakt - Michael Banditt";
 export const description = "Kontakt zu Michael Banditt – direkter Austausch zu Prozessoptimierung, Automatisierung, Veränderungsbegleitung und Zusammenarbeit.";
@@ -39,11 +41,15 @@ export const pageStyle = "contact-page.css";
       </div>
 
       <aside class="contact-summary-card">
-        <img
-          src="images/17883980_111742692710237_3916354174887244207_n.jpg"
+        <Image
+          src={portraitHeadshot}
           alt="Porträt von Michael Banditt"
           class="contact-profile-image"
-        >
+          width={504}
+          format="webp"
+          quality={80}
+          loading="eager"
+        />
 
         <div class="summary-card-content">
           <h2>Direkte Kontaktwege</h2>
