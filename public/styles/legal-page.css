@@ -1,0 +1,89 @@
+/* Rechtstexte (Impressum, Datenschutz) – lesbare Langform-Typografie */
+.legal-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.legal-content {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  box-shadow: var(--box-shadow);
+  border-top: 5px solid var(--accent-color);
+  padding: 2.75rem;
+  max-width: 820px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.legal-content h1 {
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.legal-intro {
+  color: var(--secondary-color);
+  margin-bottom: 2rem;
+}
+
+.legal-content h2 {
+  font-size: 1.35rem;
+  margin: 2rem 0 0.6rem;
+  color: var(--primary-color);
+}
+
+.legal-content h3 {
+  font-size: 1.1rem;
+  margin: 1.4rem 0 0.4rem;
+  color: var(--primary-color);
+}
+
+.legal-content p,
+.legal-content li {
+  color: #333;
+  line-height: 1.7;
+}
+
+.legal-content p {
+  margin-bottom: 0.9rem;
+}
+
+.legal-content ul {
+  margin: 0.4rem 0 1rem 1.4rem;
+}
+
+.legal-content li {
+  margin-bottom: 0.4rem;
+}
+
+.legal-content address {
+  font-style: normal;
+  line-height: 1.7;
+  margin-bottom: 0.9rem;
+}
+
+.legal-content a {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.legal-content a:hover {
+  text-decoration: underline;
+}
+
+.legal-back {
+  max-width: 820px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .legal-content {
+    padding: 1.5rem;
+  }
+}
