@@ -2,81 +2,72 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Repository Overview
+## What this repo is
 
-This is a personal website for Michael Banditt, a process optimization and automation specialist. The site consists of three main pages:
-- `index.html` - Home page with introduction and services
-- `ueber-mich.html` - About page with profile and experience
-- `kontakt.html` - Contact page with communication options
+The active **Astro** project for michaelbanditt.de — a German one-page-per-route personal
+website for Michael Banditt (process optimization, automation, change facilitation). Three
+routes: Home (`/`), Über mich (`/ueber-mich`), Kontakt (`/kontakt`). This is the deployment
+target (`site: https://michaelbanditt.de`).
 
-## Code Architecture
+**This directory is the git root.** The parent `persönliche Website/` folder is *not* under
+version control — it holds an earlier hand-written standalone-HTML prototype (`index.html`,
+`ueber-mich.html`, `kontakt.html` + `css/` + `images/`) that this Astro project was migrated
+from, plus the long-form content source docs (`Persoenliches_Profil_Michael_Banditt.md`,
+`Mein_Ansatz.md`) and the parent `CLAUDE.md`. Those legacy files share content and CSS class
+names with this project but are dead and are **not** kept in sync. Treat the profile `.md`
+docs one level up as the content source of truth when writing or revising page copy.
 
-### Structure
-- HTML files for each page with consistent header navigation
-- Shared CSS files for common styling (`css/style.css`)
-- Page-specific CSS files for unique layouts (`css/home-page.css`, `css/about-page.css`, `css/contact-page.css`)
-- Image assets in the `images/` directory
+## Commands
 
-### Styling System
-- CSS variables defined in `:root` for consistent color scheme:
-  - `--primary-color`: #0F0F0F (deep black)
-  - `--secondary-color`: #7A7A7A (medium gray)
-  - `--accent-color`: #C8A14D (gold yellow)
-  - `--light-color`: #D9D9D9 (silver gray)
-- Modern card-based design with rounded corners and subtle shadows
-- Responsive grid layouts using CSS Grid
-- Mobile-first responsive design with media queries
+```bash
+npm install          # first-time setup; requires Node >= 22.12.0 (see .nvmrc)
+npm run dev          # dev server at localhost:4321
+npm run build        # production build to ./dist/ (gitignored)
+npm run preview      # serve the built ./dist/ locally
+npm run astro check  # TypeScript / Astro diagnostics — the closest thing to a lint/test
+```
 
-### Naming Conventions
-- CSS classes follow a descriptive pattern (e.g., `.hero-section`, `.contact-card`)
-- Page-specific styles prefixed with page names (e.g., `.home-hero-modern`)
-- Consistent class naming for similar components across pages
+There is no test suite, linter, or formatter. Use `astro check` for validation.
 
-## Development Guidelines
+## Architecture
 
-### Editing HTML
-- Maintain consistent header navigation across all pages
-- Preserve the color scheme and styling conventions
-- Keep semantic HTML structure with proper heading hierarchy
-- Ensure all links are functional and point to correct destinations
+- **Pages** (`src/pages/*.astro`) are routes. Each imports `BaseLayout`, `Header`, and
+  `Footer`, and sets three frontmatter consts passed into the layout: `title`, `description`,
+  and `pageStyle` (e.g. `pageStyle = "home-page.css"`).
+- **`src/layouts/BaseLayout.astro`** owns the `<head>` and `<body><slot/></body>`. It always
+  links the global `/styles/style.css`, then conditionally links the per-page stylesheet named
+  by the `pageStyle` prop.
+- **`src/components/Header.astro`** takes an `active` prop (`'home' | 'about' | 'contact'`) to
+  mark the current nav link. `Footer.astro` is static.
+- **CSS is global, not scoped.** Astro components contain no `<style>` blocks. All styling lives
+  as plain stylesheets in `public/styles/` (`style.css` + `home-page.css`, `about-page.css`,
+  `contact-page.css`) loaded via `<link>`. A class added in a component **must** have a matching
+  rule in the relevant `public/styles/*.css` file — there is no component-local CSS.
+- Static assets (images, favicons, `site.webmanifest`, stylesheets) live in `public/` and are
+  served from the site root.
 
-### Editing CSS
-- Use existing CSS variables for colors to maintain consistency
-- Add page-specific styles to the appropriate CSS file
-- Follow the established spacing and typography patterns
-- Test responsive behavior when adding new components
+## Linking & asset paths — be consistent
 
-### Images
-- All images are stored in the `images/` directory
-- Profile images and logos should maintain aspect ratios
-- Background images are referenced in CSS files
+Components/layout use absolute paths (`href="/ueber-mich"`, `src="/images/..."`,
+`/styles/...`). Some page-body markup still uses **relative** paths without a leading slash
+(`href="kontakt"`, `src="images/..."`). When editing, prefer the absolute form to match the
+layout/header and avoid route-relative breakage.
 
-## Common Development Tasks
+## Styling system
 
-### Adding New Content Sections
-1. Identify the appropriate HTML file for the content
-2. Add new sections using existing CSS classes where possible
-3. Create new CSS rules in the page-specific CSS file if needed
-4. Test responsive behavior on different screen sizes
+CSS variables in `:root` (in `public/styles/style.css`):
+- `--primary-color` / `--dark-color`: `#0F0F0F` (deep black)
+- `--secondary-color`: `#7A7A7A` (gray)
+- `--accent-color` / `--highlight-color`: `#C8A14D` (gold) — links, hover, interactive accents
+- `--light-color`: `#D9D9D9` (silver, page background)
+- plus `--border-radius` (8px), `--box-shadow`, `--transition`
 
-### Updating Contact Information
-- Contact details are in `kontakt.html`
-- Email address is in mailto links
-- LinkedIn profile link should be updated if changed
+Conventions: descriptive kebab-case class names; page-specific classes carry the page in the
+name (`.home-hero-modern`, `.contact-card`); CSS Grid card layouts; mobile-first responsive.
 
-### Modifying Services/Expertise Lists
-- Service cards are in `index.html` and styled in `css/home-page.css`
-- Competency tags are in multiple files with consistent styling
-- Tag groups maintain consistent structure across pages
+## Notes & gotchas
 
-## Testing
-
-### Responsive Design
-- Test on mobile, tablet, and desktop breakpoints
-- Verify grid layouts adapt correctly
-- Check that navigation remains functional on all devices
-
-### Link Validation
-- Verify all internal links point to correct pages
-- Check external links (LinkedIn, email) function properly
-- Ensure anchor links work for navigation within pages
+- `dist/` is build output and **gitignored** — never edit by hand; regenerate with `npm run build`.
+- `public/styles/style_backup.css` is a backup, not loaded by any page.
+- `README.md` is the unmodified Astro starter-kit boilerplate — ignore it.
+- `Task.md` and `js/` (empty) are scaffolding leftovers.
