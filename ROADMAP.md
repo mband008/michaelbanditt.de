@@ -72,18 +72,20 @@ Platzhalter mehr.
 
 ---
 
-## M3 — Bugfixes 🟢
+## M3 — Bugfixes 🟢 ✅ ERLEDIGT
 **Ziel:** Bekannte kleine Fehler beseitigt, Pfade konsistent.
 
-- [ ] **Aktiver Nav-Link Kontakt:** `kontakt.astro` übergibt `active="kontakt"`, der
-      Header prüft auf `'contact'` → angleichen (eine Seite anpassen).
-- [ ] **Pfade vereinheitlichen:** relative Pfade im Seiteninhalt (`href="kontakt"`,
-      `href="ueber-mich"`, `src="images/…"`) auf absolute Form (`/…`) umstellen.
-- [ ] **`width`/`height` an Bildern** (entfällt, wenn M1 via `astro:assets` erledigt).
-- [ ] `npm run astro check` ohne Fehler.
+- [x] **Aktiver Nav-Link Kontakt:** `kontakt.astro` `active="kontakt"` → `active="contact"`
+      (passend zum dokumentierten Header-Prop). Im Browser bestätigt (Desktop + Mobil).
+- [x] **Pfade vereinheitlicht:** 7 relative interne Links (`href="kontakt"`,
+      `href="ueber-mich"`) auf absolute Form umgestellt. Relative `src="images/…"` gab es
+      durch M1 nicht mehr.
+- [x] **`width`/`height` an Bildern:** Header-Logo `height="auto"` (ungültig) →
+      `height="48"` (Verhältnis 654×312, kein Layout-Shift). Porträts bereits via M1.
+- [x] `npm run astro check` ohne Fehler; Build erzeugt alle Routen.
 
-**DoD:** Aktiver Menüpunkt wird auf allen drei Seiten korrekt hervorgehoben; keine
-relativen Asset-/Routen-Pfade mehr; `astro check` grün.
+**DoD:** ✅ Aktiver Menüpunkt korrekt hervorgehoben; keine relativen Asset-/Routen-Pfade
+mehr; `astro check` grün.
 
 ---
 
@@ -168,7 +170,7 @@ Lighthouse-Werte dokumentiert.
 |---|-------------|---------|--------|
 | M1 | Bilder austauschen & optimieren | 🟡 | ✅ erledigt |
 | M2 | Impressum & Datenschutz | 🟡 | ✅ erledigt |
-| M3 | Bugfixes | 🟢 | offen |
+| M3 | Bugfixes | 🟢 | ✅ erledigt |
 | M4 | CSS-Aufräumen | 🟡 | offen |
 | M5 | Typografie & Markenbild | 🟡 | offen |
 | M6 | Inhaltliche Schärfung | 🟡 | offen |
