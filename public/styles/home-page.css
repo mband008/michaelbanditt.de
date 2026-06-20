@@ -1,4 +1,4 @@
-/* Moderne Startseite – Ergänzungen für index.html */
+/* Startseite (index.astro) */
 .home-page-modern {
   display: flex;
   flex-direction: column;
@@ -17,7 +17,6 @@
 .proof-card,
 .section-block,
 .service-card,
-.tag-group,
 .cta-panel {
   background: white;
   border: 1px solid #e9ecef;
@@ -27,18 +26,6 @@
 
 .home-hero-copy {
   padding: 2.75rem;
-}
-
-.section-eyebrow {
-  display: inline-block;
-  margin-bottom: 0.8rem;
-  padding: 0.35rem 0.75rem;
-  border-radius: 999px;
-  background: rgba(200, 161, 77, 0.12);
-  color: var(--accent-color);
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  font-size: 0.9rem;
 }
 
 .home-hero-copy h1 {
@@ -65,25 +52,6 @@
   margin-top: 1.8rem;
 }
 
-.secondary-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.8rem 1.4rem;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 700;
-  color: var(--primary-color);
-  border: 1px solid rgba(15, 15, 15, 0.12);
-  transition: var(--transition);
-}
-
-.secondary-button:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent-color);
-  color: var(--accent-color);
-}
-
 .hero-trust-list {
   display: flex;
   flex-wrap: wrap;
@@ -91,8 +59,7 @@
   margin-top: 1.8rem;
 }
 
-.hero-trust-list span,
-.tag-list span {
+.hero-trust-list span {
   display: inline-flex;
   align-items: center;
   padding: 0.5rem 0.8rem;
@@ -179,7 +146,6 @@
 }
 
 .section-heading h2,
-.section-split h2,
 .cta-panel h2 {
   font-size: clamp(1.8rem, 3vw, 2.5rem);
   line-height: 1.15;
@@ -188,74 +154,24 @@
 }
 
 .section-heading p,
-.section-intro,
 .cta-panel p,
-.service-card p,
-.method-item p,
-.tag-group p {
+.service-card p {
   color: var(--secondary-color);
 }
 
-.service-grid,
-.tag-groups {
+.service-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 }
 
-.service-card,
-.tag-group {
+.service-card {
   padding: 1.4rem;
 }
 
-.service-card h3,
-.tag-group h3,
-.method-item h3 {
+.service-card h3 {
   margin-bottom: 0.55rem;
   color: var(--primary-color);
-}
-
-.section-split {
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 2rem;
-  align-items: start;
-}
-
-.method-list {
-  display: grid;
-  gap: 1rem;
-}
-
-.method-item {
-  display: grid;
-  grid-template-columns: 56px 1fr;
-  gap: 1rem;
-  align-items: start;
-  padding: 1.1rem 0;
-  border-bottom: 1px solid #ececec;
-}
-
-.method-item:last-child {
-  border-bottom: none;
-}
-
-.method-item > span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: rgba(200, 161, 77, 0.14);
-  color: var(--accent-color);
-  font-weight: 800;
-}
-
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
 }
 
 .cta-panel {
@@ -277,8 +193,6 @@
   .home-hero-modern,
   .proof-strip,
   .service-grid,
-  .tag-groups,
-  .section-split,
   .cta-panel {
     grid-template-columns: 1fr;
   }
@@ -310,14 +224,5 @@
   .cta-panel-actions a {
     width: 100%;
     text-align: center;
-  }
-
-  .method-item {
-    grid-template-columns: 1fr;
-  }
-
-  .method-item > span {
-    width: 48px;
-    height: 48px;
   }
 }
