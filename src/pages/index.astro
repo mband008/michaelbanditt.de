@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
+import portraitHeadshot from '../assets/portrait-headshot.png';
 
 const title = "Michael Banditt - Problemlöser für Prozesse, Menschen und Systeme";
 const description = "Michael Banditt – Problemlöser für Prozesse, Menschen und Systeme. Profil, Arbeitsweise und Kontakt.";
@@ -35,11 +37,15 @@ const pageStyle = "home-page.css";
       </div>
 
       <aside class="home-hero-card">
-        <img
-          src="images/17883980_111742692710237_3916354174887244207_n.jpg"
+        <Image
+          src={portraitHeadshot}
           alt="Porträt von Michael Banditt"
           class="home-profile-image"
-        >
+          width={504}
+          format="webp"
+          quality={80}
+          loading="eager"
+        />
 
         <div class="hero-card-content">
           <h2>Kurzprofil</h2>
