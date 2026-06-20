@@ -1,7 +1,7 @@
 /* Globale Basis-Styles (Farben, Layout, Header, Footer, geteilte Bausteine) */
 :root {
   --primary-color: #0F0F0F; /* Tiefschwarz */
-  --secondary-color: #7A7A7A; /* Mittelgrau */
+  --secondary-color: #6E6E6E; /* Mittelgrau (AA-konform auf Hell) */
   --accent-color: #C8A14D; /* Goldgelb */
   --light-color: #D9D9D9; /* Silbergrau / Lichtgrau */
   --dark-color: #0F0F0F; /* Tiefschwarz */

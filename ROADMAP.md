@@ -170,17 +170,30 @@ Quell-Dokumenten abgeglichen. `astro check` 0 Fehler, Build grün, Browser-Test 
 
 ---
 
-## M7 — SEO, Performance & technische Politur 🟡
+## M7 — SEO, Performance & technische Politur 🟡 ✅ ERLEDIGT
 **Ziel:** Auffindbarkeit, Teilbarkeit und technische Sauberkeit.
 
-- [ ] Open-Graph-/Twitter-Card-Meta-Tags im `BaseLayout` (Vorschaubild + Titel/Text).
-- [ ] `sitemap.xml` & `robots.txt` (Astro-Sitemap-Integration).
-- [ ] `lang`/Struktur prüfen, ggf. JSON-LD `Person`/`ProfessionalService` ergänzen.
-- [ ] Favicon-/Webmanifest-Pfade verifizieren (liegen unter `/images/`).
-- [ ] Finaler Lighthouse-Lauf (Performance / SEO / Best Practices / Accessibility).
+- [x] Open-Graph-/Twitter-Card-Meta-Tags im `BaseLayout` (+ canonical, theme-color,
+      og:image 1200×630 dunkel/Logo/Gold, absolute URLs je Seite).
+- [x] `sitemap.xml` (`@astrojs/sitemap` → sitemap-index + sitemap-0, alle 5 Seiten) &
+      `robots.txt` mit Sitemap-Verweis.
+- [x] JSON-LD `Person` (Name, Standort, LinkedIn, knowsAbout) in `BaseLayout`; `lang="de"`.
+- [x] Favicon-/Webmanifest-Pfade gefixt (Icons lagen unter `/images/`, Manifest verwies auf
+      Root; zudem Name/Short-Name ergänzt, Markenfarben gesetzt, favicon.ico verlinkt).
+- [x] Finaler Lighthouse-Lauf: **Performance 99 · Accessibility 95 · Best Practices 100 · SEO 100**.
+- [x] Sekundär-Grau auf AA abgedunkelt (#7A7A7A → #6E6E6E).
 
-**DoD:** Aussagekräftige Link-Vorschau beim Teilen; Sitemap erreichbar;
+> **Bewusste Entscheidung:** Accessibility 95 statt 100 ausschließlich wegen des
+> beibehaltenen Marken-Golds als kleiner Text auf hellem Grund (Eyebrows, proof-labels).
+> Alles Übrige ist AA-konform.
+
+**DoD:** ✅ Aussagekräftige Link-Vorschau beim Teilen; Sitemap erreichbar;
 Lighthouse-Werte dokumentiert.
+
+---
+
+## 🎉 Status: Roadmap abgeschlossen
+M1–M7 sind alle erledigt (Stand 2026-06-20). Verbleibende Ideen siehe „Optionaler Ausbau".
 
 ---
 
@@ -201,4 +214,4 @@ Lighthouse-Werte dokumentiert.
 | M4 | CSS-Aufräumen | 🟡 | ✅ erledigt |
 | M5 | Typografie & Markenbild | 🟡 | ✅ erledigt |
 | M6 | Inhaltliche Schärfung | 🟡 | ✅ erledigt |
-| M7 | SEO, Performance & Politur | 🟡 | offen |
+| M7 | SEO, Performance & Politur | 🟡 | ✅ erledigt |
