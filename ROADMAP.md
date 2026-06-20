@@ -120,19 +120,30 @@ doppelten Regel-Blöcke mehr.
 
 ---
 
-## M5 — Typografie & Markenbild 🟡
+## M5 — Typografie & Markenbild 🟡 ✅ ERLEDIGT
 **Ziel:** Hochwertigere, eigenständigere Anmutung passend zu Schwarz/Gold.
 
-- [ ] Web-Schrift einbinden (z. B. Inter / Source Sans 3, optional Serifen-Headline)
-      statt System-Stack `Segoe UI, Tahoma …` — selbst gehostet wegen DSGVO.
-- [ ] Button-Kontrast prüfen/erhöhen (`.cta-button`: weiß auf Gold ist WCAG-grenzwertig)
-      → dunkler Text auf Gold oder dunkleres Gold.
-- [ ] Logo-Konsistenz: Header-Logo (`E`/`Ewhite.png`) vs. Wortmarke aus dem Mockup
-      prüfen und vereinheitlichen.
-- [ ] Dezente visuelle Tiefe ergänzen (z. B. Logo-Mockup als Hero-/Footer-Akzent).
+- [x] Web-Schrift eingebunden: **Space Grotesk** (Headlines) + **Inter** (Fließtext),
+      via `@fontsource` **selbst gehostet** (same-origin, kein CDN → DSGVO-konform).
+- [x] Button-Kontrast erhöht: `.cta-button` jetzt dunkler Text auf Gold (~7,7:1, AAA).
+- [x] Logo-Konsistenz geprüft: `E.png`/`Ewhite.png` = dieselbe Marke (Wellen-Zeichen +
+      Wortmarke), konsistent zum Mockup → keine Änderung nötig.
+- [x] Visuelle Tiefe ergänzt: **Variante „Bold/Dunkel"** (vom User aus 3 Varianten gewählt)
+      konsistent über alle Seiten — dunkle Hero-/CTA-Blöcke (Anthrazit/Gold),
+      Uppercase-Eyebrows, goldene Heading-Unterstriche, tiefere Schatten.
+- [x] Button-Feinschliff (auf User-Wunsch): LinkedIn-Button in Marken-Blau (#0A66C2) +
+      „in"-Icon; sekundäre Outline-Buttons auf Dunkel verstärkt (Rahmen 50 % + Hover-Fill).
+- [x] Markenbild `2500-1600-max.jpg` dient als Farbreferenz (Anthrazit/Gold/Silber =
+      bestehende Palette) und bleibt bewusst uneingebunden.
 
-**DoD:** Konsistente Schrift auf allen Seiten; Buttons erreichen AA-Kontrast;
-Schrift wird lokal ausgeliefert (kein externer Font-CDN-Call).
+**Ergebnis:** `astro check` 0 Fehler, Build grün (Schriften gebündelt), Browser-Test
+Desktop + Mobil bestanden. Hierarchie: Gold = Hauptaktion, weiße Outline = sekundär,
+Blau = LinkedIn.
+
+> **Hinweis:** Der `npm install` der Schriften hat Astro innerhalb `^6` auf 6.4.8 angehoben.
+
+**DoD:** ✅ Konsistente Schrift auf allen Seiten; Buttons erreichen AA-Kontrast (Primär AAA);
+Schrift lokal ausgeliefert (kein externer Font-CDN-Call).
 
 ---
 
@@ -183,6 +194,6 @@ Lighthouse-Werte dokumentiert.
 | M2 | Impressum & Datenschutz | 🟡 | ✅ erledigt |
 | M3 | Bugfixes | 🟢 | ✅ erledigt |
 | M4 | CSS-Aufräumen | 🟡 | ✅ erledigt |
-| M5 | Typografie & Markenbild | 🟡 | offen |
+| M5 | Typografie & Markenbild | 🟡 | ✅ erledigt |
 | M6 | Inhaltliche Schärfung | 🟡 | offen |
 | M7 | SEO, Performance & Politur | 🟡 | offen |
