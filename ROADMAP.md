@@ -147,21 +147,26 @@ Schrift lokal ausgeliefert (kein externer Font-CDN-Call).
 
 ---
 
-## M6 — Inhaltliche Schärfung 🟡
+## M6 — Inhaltliche Schärfung 🟡 ✅ ERLEDIGT
 **Ziel:** Weniger Abstraktion, mehr Glaubwürdigkeit und Konkretheit.
 
 **Quelle der Wahrheit:** `Persoenliches_Profil_Michael_Banditt.md` und `Mein_Ansatz.md`
 (eine Ebene über dem Repo).
 
-- [ ] Pro beruflicher Station ein konkretes Mini-Ergebnis ergänzen (z. B. messbarer
-      Effekt einer Prozessverbesserung).
-- [ ] Du/Sie-Ansprache bewusst festlegen und durchgängig vereinheitlichen.
-- [ ] Abstrakte Formulierungen durch greifbarere Beispiele ergänzen
-      („Komplexität reduzieren" → was konkret?).
-- [ ] Meta-Titel/-Descriptions auf Prägnanz & Keywords prüfen.
+- [x] Pro Station konkrete Belege ergänzt (aus dem Profil-Dokument, keine erfundenen
+      Zahlen): Shiftmove → internes Fahrtenbuch-Tool, umgesetzte Ideen, Einarbeitung/Sparring;
+      Foundever/SiTEL → ca. 12 Jahre, First-/Second-Level bis B2B-Angebotsmanagement,
+      Automatisierung via SAP S/4HANA + Dynamics CRM + Power Automate inkl. Wirkung
+      (+ augenzwinkernder Schlusssatz: Team automatisierte sich selbst überflüssig);
+      Lohnexperte → Projektmanager mit Stakeholder-Management.
+- [x] Du/Sie-Ansprache geprüft: Inhaltsseiten durchgängig „du"/„ich" (kein „Sie");
+      Rechtstexte bewusst neutral. Keine Änderung nötig.
+- [x] Abstrakte Stellen greifbarer (Automatisierungs-Service nennt Power Automate, n8n, KI);
+      Home proof-strip mit Tools/Wirkung konkretisiert.
+- [x] Meta-Descriptions (Home/About) mit Keywords geschärft.
 
-**DoD:** Jede Station hat mind. einen konkreten Beleg; einheitliche Ansprache;
-Texte mit den Quell-Dokumenten abgeglichen.
+**DoD:** ✅ Jede Station hat konkrete Belege; einheitliche Ansprache; Texte mit den
+Quell-Dokumenten abgeglichen. `astro check` 0 Fehler, Build grün, Browser-Test bestanden.
 
 ---
 
@@ -195,5 +200,5 @@ Lighthouse-Werte dokumentiert.
 | M3 | Bugfixes | 🟢 | ✅ erledigt |
 | M4 | CSS-Aufräumen | 🟡 | ✅ erledigt |
 | M5 | Typografie & Markenbild | 🟡 | ✅ erledigt |
-| M6 | Inhaltliche Schärfung | 🟡 | offen |
+| M6 | Inhaltliche Schärfung | 🟡 | ✅ erledigt |
 | M7 | SEO, Performance & Politur | 🟡 | offen |
