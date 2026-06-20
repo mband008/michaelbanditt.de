@@ -59,8 +59,7 @@
 }
 
 .hero-trust-list span,
-.contact-card-label,
-.summary-label {
+.contact-card-label {
   display: inline-flex;
   align-items: center;
   padding: 0.45rem 0.75rem;
@@ -107,12 +106,19 @@
 }
 
 .summary-label {
-  margin-bottom: 0.55rem;
+  display: block;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--secondary-color);
   font-weight: 700;
+  margin-bottom: 0.35rem;
 }
 
-.summary-list a {
+.summary-list a,
+.summary-list p {
+  display: block;
+  margin: 0;
   color: var(--primary-color);
   font-weight: 700;
   text-decoration: none;
