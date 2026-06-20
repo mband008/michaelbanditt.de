@@ -43,22 +43,32 @@ nicht ausgeliefert.
 
 ---
 
-## M2 — Rechtssicherheit: Impressum & Datenschutz 🟡
+## M2 — Rechtssicherheit: Impressum & Datenschutz 🟡 ✅ ERLEDIGT
 **Ziel:** Pflichtseiten für eine deutsche (geschäftliche) Website vorhanden und verlinkt.
 
 **Ausgangslage:** Nur Home / Über mich / Kontakt vorhanden — Impressum (§ 5 DDG) und
-Datenschutzerklärung (DSGVO) fehlen vollständig, ebenso Footer-Links.
+Datenschutzerklärung (DSGVO) fehlten vollständig, ebenso Footer-Links.
 
-- [ ] Seite `/impressum` (`src/pages/impressum.astro`) anlegen.
-- [ ] Seite `/datenschutz` (`src/pages/datenschutz.astro`) anlegen.
-- [ ] Pflichtangaben einsetzen (von Michael zu liefern: vollständiger Name, Anschrift,
-      E-Mail, ggf. USt-IdNr./Berufsbezeichnung). Zunächst Vorlage mit Platzhaltern.
-- [ ] Footer um Links zu Impressum & Datenschutz erweitern.
-- [ ] Datenschutztext an tatsächlich genutzte Dienste anpassen (Hosting/Logs, mailto,
-      LinkedIn-Verlinkung; aktuell keine Tracking-/Analytics-Tools — bestätigen).
+- [x] Seite `/impressum` (`src/pages/impressum.astro`) angelegt — § 5 DDG: Diensteanbieter,
+      Kontakt, USt-IdNr., Verantwortlicher nach § 18 MStV, Verbraucherschlichtungs-Klausel,
+      Haftung/Links/Urheberrecht. Ohne die zum 20.07.2025 abgeschaltete EU-OS-Plattform.
+- [x] Seite `/datenschutz` (`src/pages/datenschutz.astro`) angelegt — DSGVO in 9 Abschnitten
+      (Verantwortlicher, Hosting Hetzner/Falkenstein + AVV, Server-Logfiles, Kontaktaufnahme,
+      externe Links, TLS, Betroffenenrechte, Aufsichtsbehörde Sachsen-Anhalt, Änderungen).
+- [x] Echte Pflichtangaben per Interview eingesetzt (keine Platzhalter mehr).
+- [x] Footer um Links zu Impressum & Datenschutz erweitert (+ Footer-CSS).
+- [x] Datenschutztext an die tatsächliche Lage angepasst (kein Tracking/Cookies/Embeds,
+      nur mailto + LinkedIn-Link). Neues `legal-page.css` für Langform-Typografie.
+- [x] Rechtstexte neutral, restliche Website weiterhin „du".
 
-**DoD:** Beide Seiten erreichbar, aus dem Footer verlinkt, mobil sauber; Texte enthalten
-keine offensichtlich falschen Platzhalter mehr (oder sind klar als TODO markiert).
+**Ergebnis:** `astro check` 0 Fehler, Build erzeugt beide Routen, Footer-Links auf allen
+5 Seiten verifiziert, Browser-Test (Desktop + Mobil) bestanden.
+
+> **Hinweis:** Sorgfältige, aktuelle Vorlage — keine Rechtsberatung. Für geschäftliche
+> Nutzung anwaltliche Prüfung empfohlen.
+
+**DoD:** ✅ Beide Seiten erreichbar, aus dem Footer verlinkt, mobil sauber; keine
+Platzhalter mehr.
 
 ---
 
@@ -157,7 +167,7 @@ Lighthouse-Werte dokumentiert.
 | # | Meilenstein | Aufwand | Status |
 |---|-------------|---------|--------|
 | M1 | Bilder austauschen & optimieren | 🟡 | ✅ erledigt |
-| M2 | Impressum & Datenschutz | 🟡 | offen |
+| M2 | Impressum & Datenschutz | 🟡 | ✅ erledigt |
 | M3 | Bugfixes | 🟢 | offen |
 | M4 | CSS-Aufräumen | 🟡 | offen |
 | M5 | Typografie & Markenbild | 🟡 | offen |
