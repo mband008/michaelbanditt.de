@@ -167,27 +167,32 @@ footer {
 }
 
 .footer-projects {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.8rem;
-  font-size: 0.9rem;
+  margin: 1.4rem auto 0;
+  padding-top: 1.2rem;
+  max-width: 1200px;
+  border-top: 1px solid rgba(217, 217, 217, 0.12);
+  text-align: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
 }
 
 .footer-projects-label {
   color: var(--secondary-color);
+  margin-right: 0.4rem;
 }
 
 .footer-projects a {
-  color: var(--light-color);
-  text-decoration: none;
+  color: var(--accent-color);
+  text-decoration: underline;
+  text-decoration-color: rgba(200, 161, 77, 0.4);
+  text-underline-offset: 0.25em;
   transition: var(--transition);
 }
 
-.footer-projects a:hover {
-  color: var(--accent-color);
+.footer-projects a:hover,
+.footer-projects a:focus-visible {
+  color: var(--light-color);
+  text-decoration-color: var(--light-color);
 }
 
 /* Responsive Design */
