@@ -166,6 +166,30 @@ footer {
   color: var(--accent-color);
 }
 
+.footer-projects {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.footer-projects-label {
+  color: var(--secondary-color);
+}
+
+.footer-projects a {
+  color: var(--light-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.footer-projects a:hover {
+  color: var(--accent-color);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   nav {
