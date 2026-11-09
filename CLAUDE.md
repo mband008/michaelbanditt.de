@@ -20,14 +20,20 @@ docs one level up as the content source of truth when writing or revising page c
 ## Commands
 
 ```bash
-npm install          # first-time setup; requires Node >= 22.12.0 (see .nvmrc)
+npm ci               # install exact versions from the lockfile; requires Node >= 22.23.4 (.nvmrc: 24)
 npm run dev          # dev server at localhost:4321
 npm run build        # production build to ./dist/ (gitignored)
 npm run preview      # serve the built ./dist/ locally
-npm run astro check  # TypeScript / Astro diagnostics — the closest thing to a lint/test
+npm run check        # astro check: TypeScript / Astro diagnostics
+npm test             # scripts/pruefen.mjs: checks the built ./dist/ (run after build)
 ```
 
-There is no test suite, linter, or formatter. Use `astro check` for validation.
+Astro 7. Dependencies are pinned to exact versions (`.npmrc`: `save-exact=true`).
+There is no linter or formatter.
+
+`compressHTML` in Astro 7 drops the line break between text and a following inline element
+(`Label:</span>` + newline + `<a>` renders without a space). Put `{" "}` at the end of the line
+where a space is needed; `npm test` flags such spots.
 
 ## Architecture
 
