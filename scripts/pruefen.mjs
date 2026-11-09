@@ -1,13 +1,84 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { join, relative } from 'node:path';
 
 const DIST = join(import.meta.dirname, '..', 'dist');
 const SITE = 'https://michaelbanditt.de';
 const SEITEN = ['/', '/ueber-mich/', '/kontakt/', '/impressum/', '/datenschutz/'];
 
 const datei = (seite) => join(DIST, seite, 'index.html');
+const LANDING = 'firmenhandys.michaelbanditt.de';
+const LANDING_URL = 'https://firmenhandys.michaelbanditt.de/';
+
+function textdateien(dir = DIST) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) return textdateien(p);
+    return /\.(html|xml|txt|json|webmanifest|css|js)$/.test(e.name) ? [p] : [];
+  });
+}
+
+function distInhalte() {
+  return Object.fromEntries(textdateien().map((p) => [relative(DIST, p), readFileSync(p, 'utf8')]));
+}
+
+export function landingOeffentlich(quelltext) {
+  const m = quelltext.match(/landingOeffentlich:\s*(true|false)/);
+  if (!m) throw new Error('landingOeffentlich nicht gefunden');
+  return m[1] === 'true';
+}
+
+const sichtbar = (html) =>
+  html.replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/g, ' ').replace(/<[^>]+>/g, ' ');
+
+const treffer = (inhalte, muster) =>
+  Object.entries(inhalte).flatMap(([pfad, text]) =>
+    [...text.matchAll(muster)].map((m) => `${pfad}: ${text.slice(Math.max(0, m.index - 30), m.index + m[0].length + 30)}`),
+  );
+
+export function platzhalter(inhalte) {
+  return treffer(inhalte, /\[\[/g);
+}
+
+export function verboteneWendungen(inhalte) {
+  return treffer(
+    inhalte,
+    /TÜV[-\s]geprüft|geprüft\s+(?:von|durch)\s+(?:dem\s+|den\s+)?TÜV|TÜV[-\s]zertifizierte\s+Unterlagen|zertifizierte[rn]?\s+Kurs/gi,
+  );
+}
+
+const MONATE = 'Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember';
+
+// Certificate number and date of birth must never be published. Their values are not known
+// to this repo, so the check rejects their shapes: exact day dates, number labels, long digit runs.
+export function persoenlicheDaten(inhalte) {
+  const html = Object.fromEntries(Object.entries(inhalte).filter(([p]) => p.endsWith('.html')));
+  const text = Object.fromEntries(Object.entries(html).map(([p, h]) => [p, sichtbar(h)]));
+  return [
+    ...treffer(html, /\b\d{1,2}\.\s?\d{1,2}\.\s?\d{4}\b/g),
+    ...treffer(html, new RegExp(`\\b\\d{1,2}\\.\\s?(?:${MONATE})\\s+\\d{4}`, 'g')),
+    ...treffer(html, /\b\d{4}-\d{2}-\d{2}\b/g),
+    ...treffer(html, /geboren|Geburtsdatum|Zertifikats?[-\s]?(?:nummer|nr)|Registriernummer|Reg\.-Nr/gi),
+    ...treffer(text, /(?<![A-Z\d])\d{6,}/g),
+  ];
+}
+
+export function alteErfahrungsangaben(inhalte) {
+  return treffer(inhalte, /12\+\s*Jahre Erfahrung in Service|rund 12 Jahre Praxis/g);
+}
+
+export function landingLinks(inhalte) {
+  return treffer(inhalte, new RegExp(LANDING.replaceAll('.', '\\.'), 'g'));
+}
+
+export function verkaufselemente(inhalte) {
+  return [
+    ...treffer(inhalte, /\d+(?:[.,]\d{2})?\s?(?:EUR|€)|(?:EUR|€)\s?\d/g),
+    ...treffer(inhalte, /\bkaufen\b|Warenkorb|Checkout|Bestellen|digistore/gi),
+    ...treffer(inhalte, /"@type"\s*:\s*"(?:Offer|AggregateOffer|Product)"/g),
+  ];
+}
 
 // Astro 7 (compressHTML 'jsx') drops the line break between text and a following inline element,
 // so "Text\n<a>" renders as "Text<a>". The third pattern catches "Label:</span>\n<a>".
@@ -45,4 +116,79 @@ test('Leerzeichen-Prüfung erkennt Fehler (Negativprobe)', () => {
   assert.equal(klebendeInlineElemente('<body><p><span>Von mir umgesetzt:</span><a href="/x">x</a></p>').length, 1);
   assert.deepEqual(klebendeInlineElemente('<body><p><span>Von mir umgesetzt:</span> <a href="/x">x</a></p>'), []);
   assert.deepEqual(klebendeInlineElemente('<body><div><span>Eins</span><span>Zwei</span></div>'), []);
+});
+
+test('kein Platzhalter [[ im Build', () => {
+  assert.deepEqual(platzhalter(distInhalte()), []);
+});
+
+test('Platzhalter-Prüfung erkennt Fehler (Negativprobe)', () => {
+  assert.equal(platzhalter({ 'x.html': '<p>[[Zertifikatstitel laut Urkunde]]</p>' }).length, 1);
+});
+
+test('keine verbotenen TÜV-Wendungen', () => {
+  assert.deepEqual(verboteneWendungen(distInhalte()), []);
+});
+
+test('TÜV-Prüfung erkennt Fehler (Negativprobe)', () => {
+  for (const t of ['TÜV-geprüft', 'tüv geprüft', 'geprüft von TÜV NORD', 'geprüft durch den TÜV', 'TÜV-zertifizierte Unterlagen', 'ein zertifizierter Kurs']) {
+    assert.equal(verboteneWendungen({ 'x.html': `<p>${t}</p>` }).length, 1, t);
+  }
+  assert.deepEqual(verboteneWendungen({ 'x.html': '<p>Train the Trainer (TÜV®); nicht von TÜV NORD oder anderen Dritten geprüft.</p>' }), []);
+});
+
+test('keine Zertifikatsnummer, kein Geburtsdatum, keine Tagesdaten', () => {
+  assert.deepEqual(persoenlicheDaten(distInhalte()), []);
+});
+
+test('Prüfung persönlicher Daten erkennt Fehler (Negativprobe)', () => {
+  for (const t of ['geboren am 1.2.1986', 'seit 03.09.2026', 'seit 3. September 2026', '"dateCreated":"2026-09-03"', 'Zertifikatsnummer: X', 'Zertifikat-Nr. 4711', 'Nr. 44123456']) {
+    assert.ok(persoenlicheDaten({ 'x.html': `<body><p>${t}</p></body>` }).length >= 1, t);
+  }
+  assert.deepEqual(persoenlicheDaten({ 'x.html': '<body><p>seit September 2026, 06844 Dessau, USt-IdNr. DE123456789</p><script>{"dateCreated":"2026-09"}</script></body>' }), []);
+});
+
+test('keine alten Erfahrungsangaben', () => {
+  assert.deepEqual(alteErfahrungsangaben(distInhalte()), []);
+});
+
+test('Erfahrungs-Prüfung erkennt Fehler (Negativprobe)', () => {
+  assert.equal(alteErfahrungsangaben({ 'x.html': '<p>12+ Jahre Erfahrung in Service-, Support- und Prozessumfeldern</p>' }).length, 1);
+  assert.equal(alteErfahrungsangaben({ 'x.html': '<p>rund 12 Jahre Praxis in Service</p>' }).length, 1);
+  assert.deepEqual(alteErfahrungsangaben({ 'x.html': '<p>12+</p><p>Jahre in der Prozessoptimierung</p>' }), []);
+});
+
+test('Produktkarte: Link auf die Landingpage passt zu landingOeffentlich', () => {
+  const oeffentlich = landingOeffentlich(readFileSync(join(import.meta.dirname, '..', 'src', 'data', 'trainingsvorlagen.ts'), 'utf8'));
+  const inhalte = distInhalte();
+  const links = landingLinks(inhalte);
+  const start = inhalte['index.html'];
+  if (oeffentlich) {
+    assert.equal(links.length, 1, links.join('\n'));
+    assert.equal(start.split(`href="${LANDING_URL}"`).length - 1, 1);
+    assert.ok(!start.includes('home-product-status'));
+  } else {
+    assert.deepEqual(links, []);
+    assert.ok(start.includes('class="home-product-status"'));
+    assert.ok(start.includes('Die Produktseite wird in Kürze veröffentlicht.'));
+  }
+});
+
+test('Landingpage-Prüfung erkennt Fehler (Negativprobe)', () => {
+  assert.equal(landingOeffentlich('landingOeffentlich: false,'), false);
+  assert.equal(landingOeffentlich('landingOeffentlich:true'), true);
+  assert.throws(() => landingOeffentlich('nichts'));
+  assert.equal(landingLinks({ 'index.html': `<a href="${LANDING_URL}">Zur Produktseite</a>` }).length, 1);
+  assert.equal(landingLinks({ 'sitemap-0.xml': '<loc>https://firmenhandys.michaelbanditt.de/</loc>' }).length, 1);
+});
+
+test('keine Preise, Kaufbuttons oder Offer-Daten', () => {
+  assert.deepEqual(verkaufselemente(distInhalte()), []);
+});
+
+test('Verkaufs-Prüfung erkennt Fehler (Negativprobe)', () => {
+  for (const t of ['149 EUR', '149,00 €', '€ 49', 'Jetzt kaufen', 'In den Warenkorb', 'zum Checkout', 'checkout.digistore24.com', '{"@type":"Offer"}', '{"@type": "Product"}']) {
+    assert.equal(verkaufselemente({ 'x.html': `<p>${t}</p>` }).length >= 1, true, t);
+  }
+  assert.deepEqual(verkaufselemente({ 'x.html': '<p>Fragen zu einem gekauften Paket</p>' }), []);
 });

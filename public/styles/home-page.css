@@ -189,6 +189,58 @@
   justify-content: flex-end;
 }
 
+.home-trainingsvorlagen {
+  scroll-margin-top: 6.5rem;
+}
+
+.home-product-card {
+  max-width: 780px;
+  padding: 1.6rem;
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  box-shadow: var(--box-shadow);
+}
+
+.home-product-status {
+  display: inline-block;
+  margin-bottom: 0.8rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: var(--accent-color);
+  color: var(--dark-color);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.home-product-title {
+  font-size: 1.35rem;
+  line-height: 1.25;
+  margin-bottom: 0.6rem;
+  color: var(--primary-color);
+}
+
+.home-product-card p {
+  color: var(--primary-color);
+  margin-bottom: 0.8rem;
+}
+
+.home-product-card .home-product-note {
+  color: var(--secondary-color);
+  font-size: 0.92rem;
+}
+
+.home-product-card .home-product-pending {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.home-product-card .cta-button {
+  margin-top: 0.4rem;
+}
+
 @media (max-width: 980px) {
   .home-hero-modern,
   .proof-strip,
@@ -202,6 +254,12 @@
   }
 }
 
+@media (max-width: 768px) {
+  .home-trainingsvorlagen {
+    scroll-margin-top: 12rem;
+  }
+}
+
 @media (max-width: 720px) {
   .home-hero-copy,
   .home-hero-card,
@@ -212,6 +270,10 @@
 
   .home-hero-copy h1 {
     font-size: 2.2rem;
+  }
+
+  .home-product-card {
+    padding: 1.2rem;
   }
 
   .hero-actions,

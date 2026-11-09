@@ -5,8 +5,8 @@ import Footer from '../components/Footer.astro';
 import { Image } from 'astro:assets';
 import portraitOffice from '../assets/portrait-office.png';
 
-export const title = "Über mich - Michael Banditt";
-export const description = "Michael Banditt: rund 12 Jahre Praxis in Service, Support und Prozessoptimierung – Automatisierung mit SAP S/4HANA, Dynamics CRM und Power Automate, Projektarbeit und Coaching.";
+export const title = "Über mich – Michael Banditt";
+export const description = "20 Jahre Kundensupport, über 12 Jahre Prozessoptimierung und das Zertifikat Train the Trainer (TÜV®): Hintergrund und Arbeitsweise von Michael Banditt.";
 export const pageStyle = "about-page.css";
 ---
 
@@ -17,18 +17,15 @@ export const pageStyle = "about-page.css";
     <section class="profile-hero-modern">
       <div class="profile-hero-copy">
         <span class="section-eyebrow">Über mich</span>
-        <h1>Ich arbeite an der Schnittstelle von Prozessen, Technik und Zusammenarbeit.</h1>
+        <h1>Ich bereite Supportteams auf den Alltag am Ticket vor.</h1>
         <p class="profile-lead">
-          Mein Profil verbindet operative Erfahrung, technisches Systemverständnis,
-          Prozessoptimierung und Veränderungsbegleitung.
-        </p>
-        <p>
-          Besonders wertvoll bin ich in Situationen, in denen Komplexität reduziert,
-          Abläufe neu geordnet und Menschen sicher durch Veränderungen geführt werden müssen.
+          Mein Hintergrund ist der Support selbst: 20 Jahre Berufserfahrung im Kundensupport
+          und über 12 Jahre in der Prozessoptimierung. Heute verbinde ich beides als Trainer
+          in der Erwachsenenbildung.
         </p>
 
         <div class="hero-actions">
-          <a href="/kontakt" class="cta-button">Kontakt aufnehmen</a>
+          <a href="/#trainingsvorlagen" class="cta-button">Trainingsvorlagen ansehen</a>
           <a href="#stationen" class="secondary-button">Stationen ansehen</a>
         </div>
       </div>
@@ -47,15 +44,15 @@ export const pageStyle = "about-page.css";
         <div class="profile-facts">
           <div class="fact-item">
             <span class="fact-label">Schwerpunkt</span>
-            <strong>Prozesse vereinfachen und wirksam umsetzen</strong>
+            <strong>Trainings und Trainingsunterlagen für IT-Supportteams</strong>
           </div>
           <div class="fact-item">
             <span class="fact-label">Arbeitsstil</span>
             <strong>analytisch, pragmatisch, menschenorientiert</strong>
           </div>
           <div class="fact-item">
-            <span class="fact-label">Passende Kontexte</span>
-            <strong>Vereinfachung, Veränderung, technische Übersetzung</strong>
+            <span class="fact-label">Qualifikation</span>
+            <strong>Train the Trainer (TÜV®), TÜV NORD CERT GmbH</strong>
           </div>
         </div>
 
@@ -67,17 +64,38 @@ export const pageStyle = "about-page.css";
 
     <section class="proof-strip">
       <article class="proof-card">
+        <span class="proof-number">20</span>
+        <p>Jahre Berufserfahrung im Kundensupport</p>
+      </article>
+      <article class="proof-card">
         <span class="proof-number">12+</span>
-        <p>Jahre Erfahrung in Service-, Support- und Prozessumfeldern</p>
+        <p>Jahre in der Prozessoptimierung</p>
       </article>
       <article class="proof-card">
-        <span class="proof-number">3</span>
-        <p>starke Kompetenzfelder: Prozess, Technik und Begleitung</p>
+        <span class="proof-number">2026</span>
+        <p>seit September zertifiziert als Train the Trainer (TÜV®)</p>
       </article>
-      <article class="proof-card">
-        <span class="proof-number">1</span>
-        <p>klarer Fokus: reale Probleme verständlich und lösbar machen</p>
-      </article>
+    </section>
+
+    <section class="section-block section-split" id="qualifikation">
+      <div>
+        <span class="section-eyebrow">Qualifikation</span>
+        <h2>Train the Trainer (TÜV®)</h2>
+      </div>
+
+      <div>
+        <p class="section-intro">
+          Seit September 2026 bin ich zertifiziert als Train the Trainer (TÜV®) durch die
+          TÜV NORD CERT GmbH. Die Zertifizierung ergänzt, was ich vorher schon getan habe:
+          Kolleginnen und Kollegen in neue Systeme und Abläufe einarbeiten und neue
+          Mitarbeitende fachlich begleiten.
+        </p>
+        <p class="about-qualification-note">
+          <strong>Hinweis:</strong>{" "}
+          Das Zertifikat ist eine persönliche Qualifikation. Meine Trainingsunterlagen gebe
+          ich selbst heraus; sie wurden nicht von TÜV NORD oder anderen Dritten geprüft.
+        </p>
+      </div>
     </section>
 
     <section class="section-block">
@@ -170,34 +188,29 @@ export const pageStyle = "about-page.css";
     <section class="section-block section-split">
       <div>
         <span class="section-eyebrow">Arbeitsweise</span>
-        <h2>Wie ich typischerweise an Themen herangehe</h2>
-        <p class="section-intro">
-          Ich arbeite am besten, wenn die Herausforderung klar benannt ist und der Lösungsweg offen bleibt.
-          Dann analysiere ich die Lage, priorisiere die relevanten Hebel und entwickle ein Vorgehen,
-          das fachlich sauber und praktisch tragfähig ist.
-        </p>
+        <h2>Wie ich Trainings aufbaue</h2>
       </div>
 
       <div class="method-list">
         <article class="method-item">
           <span>01</span>
           <div>
-            <h3>Ursachen statt Symptome klären</h3>
-            <p>Ich schaue hinter Routinen, Ad-hoc-Lösungen und Reibung, um das eigentliche Problem sichtbar zu machen.</p>
+            <h3>Vom echten Ticket ausgehen</h3>
+            <p>Ich beginne mit der Situation, wie sie im Support ankommt: unvollständig, unter Zeitdruck, mit einer Vermutung des Anrufers.</p>
           </div>
         </article>
         <article class="method-item">
           <span>02</span>
           <div>
-            <h3>Lösungen realistisch aufbauen</h3>
-            <p>Ich entwickle Strukturen, Zuständigkeiten und Abläufe, die nicht nur gut aussehen, sondern funktionieren.</p>
+            <h3>Den Weg üben, nicht die Klickfolge</h3>
+            <p>Rückfragen stellen, Hypothesen prüfen, Grenzen erkennen und sauber übergeben. Fachlich begründete Alternativen sind zugelassen.</p>
           </div>
         </article>
         <article class="method-item">
           <span>03</span>
           <div>
-            <h3>Einführung mitdenken</h3>
-            <p>Ich begleite Veränderungen so, dass Teams Orientierung gewinnen und neue Arbeitsweisen dauerhaft übernehmen können.</p>
+            <h3>Gemeinsam auswerten</h3>
+            <p>Ein Bewertungsbogen gibt Trainer und Team eine gemeinsame Grundlage für das Gespräch nach der Übung.</p>
           </div>
         </article>
       </div>
@@ -210,6 +223,16 @@ export const pageStyle = "about-page.css";
       </div>
 
       <div class="tag-groups">
+        <div class="tag-group">
+          <h3>Training &amp; Erwachsenenbildung</h3>
+          <div class="tag-list">
+            <span>Train the Trainer</span>
+            <span>Erwachsenenbildung</span>
+            <span>Fallbasiertes Üben</span>
+            <span>Einarbeitung</span>
+            <span>Wissensvermittlung</span>
+          </div>
+        </div>
         <div class="tag-group">
           <h3>Prozess &amp; Organisation</h3>
           <div class="tag-list">
@@ -241,8 +264,6 @@ export const pageStyle = "about-page.css";
           <div class="tag-list">
             <span>Coaching</span>
             <span>Mentoring</span>
-            <span>Training</span>
-            <span>Wissensvermittlung</span>
             <span>Technischer Support</span>
           </div>
         </div>
@@ -252,10 +273,9 @@ export const pageStyle = "about-page.css";
     <section class="about-cta-panel">
       <div>
         <span class="section-eyebrow">Nächster Schritt</span>
-        <h2>Lass uns über dein konkretes Thema sprechen.</h2>
+        <h2>Fragen zu Trainings oder Trainingsvorlagen? Schreib mir.</h2>
         <p>
-          Wenn du jemanden suchst, der Komplexität reduziert und Verbesserungen in die Umsetzung bringt,
-          freue ich mich über deine Nachricht.
+          Ein paar Sätze zu deinem Anliegen reichen. Ich freue mich über deine Nachricht.
         </p>
       </div>
       <a href="/kontakt" class="cta-button">Jetzt Kontakt aufnehmen</a>

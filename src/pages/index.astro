@@ -4,9 +4,10 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { Image } from 'astro:assets';
 import portraitHeadshot from '../assets/portrait-headshot.png';
+import { firmenhandys } from '../data/trainingsvorlagen';
 
-const title = "Michael Banditt - Problemlöser für Prozesse, Menschen und Systeme";
-const description = "Michael Banditt – Problemlöser für Prozesse, Menschen und Systeme. Prozessoptimierung, Automatisierung (u. a. Power Automate, n8n) und Change-Begleitung aus operativer Praxis.";
+const title = "Michael Banditt – Trainer für IT-Support und Trainingsvorlagen";
+const description = "Michael Banditt, Trainer für Erwachsenenbildung mit Schwerpunkt IT-Support. Trainingsvorlagen mit Übungsfällen, Lösungen und Bewertungsbogen für Supportteams.";
 const pageStyle = "home-page.css";
 ---
 
@@ -16,23 +17,25 @@ const pageStyle = "home-page.css";
   <main class="home-page-modern">
     <section class="home-hero-modern">
       <div class="home-hero-copy">
-        <span class="section-eyebrow">Michael Banditt</span>
-        <h1>Prozesse vereinfachen. Veränderung möglich machen.</h1>
+        <span class="section-eyebrow">Michael Banditt · Trainer für IT-Support</span>
+        <h1>Support trainieren. Mit Fällen aus dem Alltag.</h1>
         <p class="hero-lead">
-          Dort, wo Abläufe unnötig kompliziert geworden sind, Automatisierung sinnvoll helfen soll
-          und neue Lösungen im Alltag wirklich funktionieren müssen.
+          Ich bin Trainer für Erwachsenenbildung mit Schwerpunkt IT-Support. Ich entwickle
+          Trainingsunterlagen, mit denen Teamleitungen und interne Trainer ihre Supportkräfte auf
+          typische Tickets vorbereiten können: mit gezielten Rückfragen, nachvollziehbaren
+          Diagnosewegen und Lösungen für die Auswertung.
         </p>
 
         <div class="hero-actions">
-          <a href="/kontakt" class="cta-button">Kontakt aufnehmen</a>
+          <a href="#trainingsvorlagen" class="cta-button">Trainingsvorlagen ansehen</a>
           <a href="/ueber-mich" class="secondary-button">Mehr über mich</a>
         </div>
 
         <div class="hero-trust-list" aria-label="Schwerpunkte">
+          <span>IT-Support</span>
+          <span>Erwachsenenbildung</span>
+          <span>Train the Trainer</span>
           <span>Prozessoptimierung</span>
-          <span>Automatisierung</span>
-          <span>Change-Begleitung</span>
-          <span>Systemverständnis</span>
         </div>
       </div>
 
@@ -51,49 +54,69 @@ const pageStyle = "home-page.css";
           <h2>Kurzprofil</h2>
           <div class="hero-focus-list">
             <article>
-              <strong>Struktur statt Reibung</strong>
-              <p>Ich erkenne schnell, wo Abläufe unnötig kompliziert geworden sind.</p>
+              <strong>20 Jahre Kundensupport</strong>
+              <p>Berufserfahrung im Kundensupport.</p>
             </article>
             <article>
-              <strong>Technik mit Augenmaß</strong>
-              <p>Automatisierung muss spürbar entlasten.</p>
+              <strong>Über 12 Jahre Prozessoptimierung</strong>
+              <p>Abläufe vereinfachen, Übergaben klären, Routine automatisieren.</p>
             </article>
             <article>
-              <strong>Umsetzung mit Akzeptanz</strong>
-              <p>Neue Lösungen müssen im Alltag funktionieren.</p>
+              <strong>Train the Trainer (TÜV®)</strong>
+              <p>Zertifikat der TÜV NORD CERT GmbH, seit September 2026.</p>
             </article>
           </div>
         </div>
       </aside>
     </section>
 
+    <section class="section-block home-trainingsvorlagen" id="trainingsvorlagen">
+      <div class="section-heading">
+        <span class="section-eyebrow">Trainingsvorlagen</span>
+        <h2>Übungsfälle für IT-Supportteams</h2>
+        <p>
+          Fertige Trainingsunterlagen für die Einarbeitung und Weiterbildung im Support.
+          Teilnehmende arbeiten am Ticket, Trainer erhalten die verdeckten Befunde, einen
+          Lösungsweg und einen Bewertungsbogen.
+        </p>
+      </div>
+
+      <article class="home-product-card">
+        {!firmenhandys.landingOeffentlich && <span class="home-product-status">Vorschau</span>}
+        <h3 class="home-product-title">{firmenhandys.titel}</h3>
+        <p>{firmenhandys.kurztext}</p>
+        <p class="home-product-note">{firmenhandys.kennzeichnung}</p>
+        {firmenhandys.landingOeffentlich
+          ? <a href={firmenhandys.url} class="cta-button">Zur Produktseite</a>
+          : <p class="home-product-pending">Die Produktseite wird in Kürze veröffentlicht.</p>}
+      </article>
+    </section>
+
     <section class="section-block">
       <div class="section-heading">
-        <span class="section-eyebrow">Wobei ich unterstütze</span>
-        <h2>Drei Einsatzfelder, in denen ich besonders wirksam bin</h2>
-        <p>
-          Wenn Prozesse, Systeme und Alltag zusammenpassen müssen.
-        </p>
+        <span class="section-eyebrow">Aufbau</span>
+        <h2>So sind meine Trainingsunterlagen aufgebaut</h2>
       </div>
 
       <div class="service-grid">
         <article class="service-card">
-          <h3>Prozesse vereinfachen</h3>
+          <h3>Fälle aus dem Supportalltag</h3>
           <p>
-            Ich reduziere Reibung und entwickle Abläufe, die klar und alltagstauglich sind.
+            Fiktive Tickets mit Gesprächsverlauf, wie sie im First-Level-Support ankommen.
           </p>
         </article>
         <article class="service-card">
-          <h3>Automatisierung sinnvoll einsetzen</h3>
+          <h3>Methodik vor Technik</h3>
           <p>
-            Ich prüfe, was sich wirklich lohnt — von Power Automate über n8n bis KI-Assistenz —
-            und entlaste so von Routine, ohne neue Komplexität zu schaffen.
+            Geübt werden Rückfragen, Hypothesen, Grenzen, Eskalation und Kommunikation.
+            Technische Details nur, soweit Herstellerquellen sie belegen.
           </p>
         </article>
         <article class="service-card">
-          <h3>Veränderung anschlussfähig machen</h3>
+          <h3>Getrennte Unterlagen für Teilnehmende und Trainer</h3>
           <p>
-            Ich begleite neue Arbeitsweisen so, dass sie verstanden und genutzt werden.
+            Teilnehmende sehen den Auftrag, Trainer zusätzlich die Befunde, einen Lösungsweg
+            und den Bewertungsbogen.
           </p>
         </article>
       </div>
@@ -102,9 +125,9 @@ const pageStyle = "home-page.css";
     <section class="section-block">
       <div class="section-heading">
         <span class="section-eyebrow">Praxisbezug</span>
-        <h2>Worauf mein Profil aufbaut</h2>
+        <h2>Worauf meine Trainings aufbauen</h2>
         <p>
-          Mein Profil verbindet Praxis, Technik und Veränderung.
+          Stationen aus Kundensupport, Prozessoptimierung und Projektarbeit.
         </p>
       </div>
 
@@ -127,9 +150,9 @@ const pageStyle = "home-page.css";
     <section class="cta-panel">
       <div>
         <span class="section-eyebrow">Nächster Schritt</span>
-        <h2>Du hast ein Thema, das klarer oder einfacher werden soll?</h2>
+        <h2>Am besten starten wir mit einer kurzen, konkreten Nachricht.</h2>
         <p>
-          Dann lass uns sprechen.
+          Wenn du eine Frage zu Trainings oder Trainingsvorlagen hast, freue ich mich über deine Nachricht.
         </p>
       </div>
 

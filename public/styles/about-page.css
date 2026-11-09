@@ -197,8 +197,18 @@
 
 .tag-groups {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+}
+
+.about-qualification-note {
+  margin-top: 1rem;
+  padding: 1rem 1.2rem;
+  border-left: 3px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  background: #f8f8f8;
+  color: var(--primary-color);
+  font-size: 0.95rem;
 }
 
 .tag-group {

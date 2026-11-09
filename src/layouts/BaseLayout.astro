@@ -16,7 +16,7 @@ const personLd = {
   "name": "Michael Banditt",
   "url": Astro.site?.toString(),
   "image": ogImage.toString(),
-  "jobTitle": "Prozessoptimierung, Automatisierung & Change-Begleitung",
+  "jobTitle": "Trainer für Erwachsenenbildung im IT-Support",
   "email": "hallo@michaelbanditt.de",
   "address": {
     "@type": "PostalAddress",
@@ -25,12 +25,24 @@ const personLd = {
   },
   "sameAs": ["https://www.linkedin.com/in/michael-banditt/"],
   "knowsAbout": [
+    "Erwachsenenbildung",
+    "Train-the-Trainer",
+    "IT-Support",
+    "First-Level-Support",
+    "Kundensupport",
     "Prozessoptimierung",
-    "Prozessautomatisierung",
-    "Change-Management",
-    "Coaching",
-    "Projektmanagement"
-  ]
+    "Prozessautomatisierung"
+  ],
+  "hasCredential": {
+    "@type": "EducationalOccupationalCredential",
+    "name": "Train the Trainer (TÜV®)",
+    "credentialCategory": "Zertifikat",
+    "recognizedBy": {
+      "@type": "Organization",
+      "name": "TÜV NORD CERT GmbH"
+    },
+    "dateCreated": "2026-09"
+  }
 };
 ---
 
