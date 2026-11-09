@@ -5,17 +5,35 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repo is
 
 The active **Astro** project for michaelbanditt.de — a German one-page-per-route personal
-website for Michael Banditt (process optimization, automation, change facilitation). Three
-routes: Home (`/`), Über mich (`/ueber-mich`), Kontakt (`/kontakt`). This is the deployment
-target (`site: https://michaelbanditt.de`).
+website for Michael Banditt, positioned as a **trainer profile**: trainer for adult education
+with a focus on IT support, plus training templates ("Trainingsvorlagen") for support teams.
+Process optimization stays visible as experience only, not as a separate service offer.
+Routes: Home (`/`, with the `#trainingsvorlagen` section), Über mich (`/ueber-mich`),
+Kontakt (`/kontakt`), Impressum (`/impressum`), Datenschutz (`/datenschutz`). This is the
+deployment target (`site: https://michaelbanditt.de`). Coolify auto-deploys every push to
+`main`, so a merge goes live immediately.
 
 **This directory is the git root.** The parent `persönliche Website/` folder is *not* under
 version control — it holds an earlier hand-written standalone-HTML prototype (`index.html`,
 `ueber-mich.html`, `kontakt.html` + `css/` + `images/`) that this Astro project was migrated
 from, plus the long-form content source docs (`Persoenliches_Profil_Michael_Banditt.md`,
 `Mein_Ansatz.md`) and the parent `CLAUDE.md`. Those legacy files share content and CSS class
-names with this project but are dead and are **not** kept in sync. Treat the profile `.md`
-docs one level up as the content source of truth when writing or revising page copy.
+names with this project but are dead and are **not** kept in sync. The profile `.md` docs one
+level up are outdated on experience figures and the certificate; the binding public facts live
+in the planning folder (`~/AI-Dev-Team/Side-Hustle/projects/support-trainings/PROJECT.md`).
+
+## Content rules
+
+- Public facts: 20 years of customer support, over 12 years of process optimization,
+  certificate "Train the Trainer (TÜV®)" issued by TÜV NORD CERT GmbH, shown as
+  "seit September 2026". Never publish the certificate number or date of birth.
+- No TÜV logo or test mark, and nothing implying the training materials were reviewed by
+  TÜV ("TÜV-geprüft", "geprüft von TÜV", "TÜV-zertifizierte Unterlagen", "zertifizierter Kurs").
+  The about page states that the certificate is a personal qualification.
+- No prices, buy buttons or `Product`/`Offer` structured data on this site; selling happens
+  on the product landing pages (subdomains).
+- Product cards come from `src/data/trainingsvorlagen.ts`. `landingOeffentlich: false` shows
+  the "Vorschau" badge without a link; `true` renders exactly one link to the product page.
 
 ## Commands
 
@@ -44,10 +62,12 @@ where a space is needed; `npm test` flags such spots.
   links the global `/styles/style.css`, then conditionally links the per-page stylesheet named
   by the `pageStyle` prop.
 - **`src/components/Header.astro`** takes an `active` prop (`'home' | 'about' | 'contact'`) to
-  mark the current nav link. `Footer.astro` is static.
+  mark the current nav link; "Trainingsvorlagen" links to the `/#trainingsvorlagen` anchor and
+  has no active state. `Footer.astro` is static.
+- **`src/data/trainingsvorlagen.ts`** holds the product card data for the home page.
 - **CSS is global, not scoped.** Astro components contain no `<style>` blocks. All styling lives
   as plain stylesheets in `public/styles/` (`style.css` + `home-page.css`, `about-page.css`,
-  `contact-page.css`) loaded via `<link>`. A class added in a component **must** have a matching
+  `contact-page.css`, `legal-page.css`) loaded via `<link>`. A class added in a component **must** have a matching
   rule in the relevant `public/styles/*.css` file — there is no component-local CSS.
 - Static assets (images, favicons, `site.webmanifest`, stylesheets) live in `public/` and are
   served from the site root.
@@ -63,7 +83,7 @@ layout/header and avoid route-relative breakage.
 
 CSS variables in `:root` (in `public/styles/style.css`):
 - `--primary-color` / `--dark-color`: `#0F0F0F` (deep black)
-- `--secondary-color`: `#7A7A7A` (gray)
+- `--secondary-color`: `#6E6E6E` (gray)
 - `--accent-color` / `--highlight-color`: `#C8A14D` (gold) — links, hover, interactive accents
 - `--light-color`: `#D9D9D9` (silver, page background)
 - plus `--border-radius` (8px), `--box-shadow`, `--transition`
@@ -74,6 +94,5 @@ name (`.home-hero-modern`, `.contact-card`); CSS Grid card layouts; mobile-first
 ## Notes & gotchas
 
 - `dist/` is build output and **gitignored** — never edit by hand; regenerate with `npm run build`.
-- `public/styles/style_backup.css` is a backup, not loaded by any page.
 - `README.md` is the unmodified Astro starter-kit boilerplate — ignore it.
 - `Task.md` and `js/` (empty) are scaffolding leftovers.
