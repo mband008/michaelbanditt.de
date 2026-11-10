@@ -339,10 +339,11 @@ test('Datenschutz: Abschnitt „Webanalyse mit Umami“ vollständig, keine Auss
     'statistik.michaelbanditt.de', 'Hetzner Online GmbH in Deutschland', 'nicht an Dritte weitergegeben',
     'keine Cookies', 'speichert keine IP-Adressen', 'Referrer-URL', 'Betriebssystem und Gerätetyp',
     'Bildschirmgröße und eingestellte Sprache', 'Land, Region und Stadt', 'E-Mail-Adressen, das LinkedIn-Profil',
-    'Do Not Track', 'Art. 6 Abs. 1 lit. f DSGVO', 'bis zu 24 Monate gespeichert und danach gelöscht',
+    'Do Not Track', 'Art. 6 Abs. 1 lit. f DSGVO', '14 Monate gespeichert, danach werden sie automatisch gelöscht',
   ]) assert.ok(text.includes(t), t);
   const alles = sichtbar(html).replace(/\s+/g, ' ');
   assert.doesNotMatch(alles, /kein Tracking|keine Analyse-Werkzeuge|täglich/);
+  assert.doesNotMatch(alles, /24 Monate/);
   assert.match(alles, /Für eine datensparsame Reichweitenmessung setze ich die selbst betriebene Software Umami ein \(siehe Abschnitt 4\)/);
   const nummern = [...html.matchAll(/<h2>(\d+)\./g)].map((m) => Number(m[1]));
   assert.deepEqual(nummern, nummern.map((_, i) => i + 1));
