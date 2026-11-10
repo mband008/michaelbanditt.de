@@ -209,7 +209,7 @@ test('Verkaufs-Prüfung erkennt Fehler (Negativprobe)', () => {
 test('Telefonnummer nur im Impressum, mit tel:-Link, alte Mobilnummer nirgends', () => {
   const inhalte = distInhalte();
   const impressum = inhalte['impressum/index.html'];
-  assert.ok(sichtbar(impressum).includes(`Telefon: ${TELEFON}`));
+  assert.ok(sichtbar(impressum).replace(/\s+/g, ' ').includes(`Telefon: ${TELEFON}`));
   assert.equal(impressum.split(`href="${TELEFON_LINK}"`).length - 1, 1);
   assert.deepEqual(seitenMitTelefon(inhalte), ['impressum/index.html']);
   assert.deepEqual(alteNummer(inhalte), []);
