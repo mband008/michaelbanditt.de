@@ -10,6 +10,9 @@ const SEITEN = ['/', '/ueber-mich/', '/kontakt/', '/impressum/', '/datenschutz/'
 const datei = (seite) => join(DIST, seite, 'index.html');
 const LANDING = 'firmenhandys.michaelbanditt.de';
 const LANDING_URL = 'https://firmenhandys.michaelbanditt.de/';
+const TELEFON = '+49 340 87117800';
+const TELEFON_LINK = 'tel:+4934087117800';
+const ALTE_NUMMER = '15778633668';
 
 function textdateien(dir = DIST) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
@@ -54,7 +57,7 @@ const MONATE = 'Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktobe
 // to this repo, so the check rejects their shapes: exact day dates, number labels, long digit runs.
 export function persoenlicheDaten(inhalte) {
   const html = Object.fromEntries(Object.entries(inhalte).filter(([p]) => p.endsWith('.html')));
-  const text = Object.fromEntries(Object.entries(html).map(([p, h]) => [p, sichtbar(h)]));
+  const text = Object.fromEntries(Object.entries(html).map(([p, h]) => [p, sichtbar(h).replaceAll(TELEFON, ' ')]));
   return [
     ...treffer(html, /\b\d{1,2}\.\s?\d{1,2}\.\s?\d{4}\b/g),
     ...treffer(html, new RegExp(`\\b\\d{1,2}\\.\\s?(?:${MONATE})\\s+\\d{4}`, 'g')),
@@ -62,6 +65,16 @@ export function persoenlicheDaten(inhalte) {
     ...treffer(html, /geboren|Geburtsdatum|Zertifikats?[-\s]?(?:nummer|nr)|Registriernummer|Reg\.-Nr/gi),
     ...treffer(text, /(?<![A-Z\d])\d{6,}/g),
   ];
+}
+
+const ziffern = (text) => text.replace(/\D/g, '');
+
+export function seitenMitTelefon(inhalte) {
+  return Object.keys(inhalte).filter((p) => ziffern(inhalte[p]).includes('87117800')).sort();
+}
+
+export function alteNummer(inhalte) {
+  return Object.keys(inhalte).filter((p) => ziffern(inhalte[p]).includes(ALTE_NUMMER));
 }
 
 export function alteErfahrungsangaben(inhalte) {
@@ -191,4 +204,22 @@ test('Verkaufs-Prüfung erkennt Fehler (Negativprobe)', () => {
     assert.equal(verkaufselemente({ 'x.html': `<p>${t}</p>` }).length >= 1, true, t);
   }
   assert.deepEqual(verkaufselemente({ 'x.html': '<p>Fragen zu einem gekauften Paket</p>' }), []);
+});
+
+test('Telefonnummer nur im Impressum, mit tel:-Link, alte Mobilnummer nirgends', () => {
+  const inhalte = distInhalte();
+  const impressum = inhalte['impressum/index.html'];
+  assert.ok(sichtbar(impressum).includes(`Telefon: ${TELEFON}`));
+  assert.equal(impressum.split(`href="${TELEFON_LINK}"`).length - 1, 1);
+  assert.deepEqual(seitenMitTelefon(inhalte), ['impressum/index.html']);
+  assert.deepEqual(alteNummer(inhalte), []);
+});
+
+test('Telefon-Prüfung erkennt Fehler (Negativprobe)', () => {
+  assert.deepEqual(seitenMitTelefon({ 'kontakt/index.html': `<p>${TELEFON}</p>`, 'index.html': '<p>x</p>' }), ['kontakt/index.html']);
+  assert.deepEqual(seitenMitTelefon({ 'index.html': `<script>{"telephone":"+4934087117800"}</script>` }), ['index.html']);
+  assert.deepEqual(alteNummer({ 'x.html': '<p>0157 78633668</p>' }), ['x.html']);
+  assert.deepEqual(alteNummer({ 'x.html': '<a href="tel:+4915778633668">x</a>' }), ['x.html']);
+  assert.ok(persoenlicheDaten({ 'x.html': `<body><p>${TELEFON}</p></body>` }).length === 0);
+  assert.ok(persoenlicheDaten({ 'x.html': '<body><p>+49 340 99999999</p></body>' }).length >= 1);
 });
