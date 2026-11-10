@@ -65,6 +65,12 @@ where a space is needed; `npm test` flags such spots.
   mark the current nav link; "Trainingsvorlagen" links to the `/#trainingsvorlagen` anchor and
   has no active state. `Footer.astro` is static.
 - **`src/data/trainingsvorlagen.ts`** holds the product card data for the home page.
+- **Web analytics:** self-hosted Umami at `https://statistik.michaelbanditt.de`, configured in
+  `src/data/statistik.ts` and rendered by `BaseLayout.astro` in production builds only. Set
+  `aktiv: false` there to remove the tracker from every page. Click events use
+  `data-umami-event` attributes only (`kontakt-email`, `kontakt-linkedin`,
+  `trainingsvorlagen-produktseite`); no other external script may be added. When the tracker
+  changes, update section 4 of `src/pages/datenschutz.astro`.
 - **CSS is global, not scoped.** Astro components contain no `<style>` blocks. All styling lives
   as plain stylesheets in `public/styles/` (`style.css` + `home-page.css`, `about-page.css`,
   `contact-page.css`, `legal-page.css`) loaded via `<link>`. A class added in a component **must** have a matching

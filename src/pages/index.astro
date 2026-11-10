@@ -87,7 +87,7 @@ const pageStyle = "home-page.css";
         <p>{firmenhandys.kurztext}</p>
         <p class="home-product-note">{firmenhandys.kennzeichnung}</p>
         {firmenhandys.landingOeffentlich
-          ? <a href={firmenhandys.url} class="cta-button">Zur Produktseite</a>
+          ? <a href={firmenhandys.url} class="cta-button" data-umami-event="trainingsvorlagen-produktseite">Zur Produktseite</a>
           : <p class="home-product-pending">Die Produktseite wird in Kürze veröffentlicht.</p>}
       </article>
     </section>

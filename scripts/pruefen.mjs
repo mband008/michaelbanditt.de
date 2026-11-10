@@ -13,6 +13,8 @@ const LANDING_URL = 'https://firmenhandys.michaelbanditt.de/';
 const TELEFON = '+49 340 87117800';
 const TELEFON_LINK = 'tel:+4934087117800';
 const ALTE_NUMMER = '15778633668';
+const TRACKER_SRC = 'https://statistik.michaelbanditt.de/script.js';
+const WEBSITE_ID = 'a0d027f6-39fd-4d53-9fef-5382814c5ba6';
 
 function textdateien(dir = DIST) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
@@ -118,6 +120,45 @@ export function logAngabenFehler(html) {
   if (frist) fehler.push(`feste Frist: ${frist[0]}`);
   return fehler;
 }
+
+export function abschnitt(html, ueberschrift) {
+  const start = html.indexOf(ueberschrift);
+  if (start < 0) throw new Error(`Abschnitt ${ueberschrift} fehlt`);
+  const ende = html.indexOf('<h2', start + ueberschrift.length);
+  return html.slice(start, ende < 0 ? undefined : ende);
+}
+
+export function trackerFehler(html) {
+  const fehler = [];
+  const tags = [...html.matchAll(/<script\b[^>]*>/g)].map((m) => m[0]);
+  const tracker = tags.filter((t) => t.includes(`src="${TRACKER_SRC}"`));
+  if (tracker.length !== 1) fehler.push(`${tracker.length} Tracker-Skripte`);
+  else {
+    for (const a of [`data-website-id="${WEBSITE_ID}"`, 'data-domains="michaelbanditt.de"', 'data-do-not-track="true"', ' defer']) {
+      if (!tracker[0].includes(a)) fehler.push(`Tracker ohne ${a.trim()}`);
+    }
+  }
+  for (const t of tags) {
+    const src = t.match(/\bsrc="([^"]+)"/)?.[1];
+    if (src && src !== TRACKER_SRC && /^(https?:)?\/\//i.test(src)) fehler.push(`fremde Skriptquelle: ${src}`);
+  }
+  return fehler;
+}
+
+const SOLL_EREIGNIS = (href) =>
+  href.startsWith('mailto:') ? 'kontakt-email'
+    : /^https:\/\/(www\.)?linkedin\.com\//.test(href) ? 'kontakt-linkedin'
+      : href === LANDING_URL ? 'trainingsvorlagen-produktseite'
+        : null;
+
+export function linksOhneEreignis(html) {
+  return [...html.matchAll(/<a\b[^>]*>/g)].map((m) => m[0]).filter((a) => {
+    const soll = SOLL_EREIGNIS(a.match(/\bhref="([^"]*)"/)?.[1] ?? '');
+    return soll && !a.includes(`data-umami-event="${soll}"`);
+  });
+}
+
+const ereignisse = (html) => [...html.matchAll(/data-umami-event="([^"]+)"/g)].map((m) => m[1]);
 
 test('dist/ ist gebaut', () => {
   assert.ok(existsSync(DIST), 'dist/ fehlt – zuerst "npm run build" ausführen');
@@ -231,7 +272,7 @@ test('Telefonnummer nur im Impressum, mit tel:-Link, alte Mobilnummer nirgends',
 
 test('Datenschutz: Server-Logs mit gekürzter IP, Überschreiben/Löschen, keine feste Tagesfrist', () => {
   const html = readFileSync(datei('/datenschutz/'), 'utf8');
-  assert.deepEqual(logAngabenFehler(html), []);
+  assert.deepEqual(logAngabenFehler(abschnitt(html, '3. Hosting und Server-Logfiles')), []);
   assert.match(sichtbar(html), /Stand: November 2026/);
 });
 
@@ -253,4 +294,56 @@ test('Telefon-Prüfung erkennt Fehler (Negativprobe)', () => {
   assert.deepEqual(alteNummer({ 'x.html': '<a href="tel:+4915778633668">x</a>' }), ['x.html']);
   assert.ok(persoenlicheDaten({ 'x.html': `<body><p>${TELEFON}</p></body>` }).length === 0);
   assert.ok(persoenlicheDaten({ 'x.html': '<body><p>+49 340 99999999</p></body>' }).length >= 1);
+});
+
+test('Umami-Tracker auf allen fünf Seiten: genau einmal, richtige ID, keine andere externe Skriptquelle', () => {
+  for (const s of SEITEN) assert.deepEqual(trackerFehler(readFileSync(datei(s), 'utf8')), [], s);
+});
+
+test('Tracker-Prüfung erkennt Fehler (Negativprobe)', () => {
+  const gut = `<script defer src="${TRACKER_SRC}" data-website-id="${WEBSITE_ID}" data-domains="michaelbanditt.de" data-do-not-track="true"></script>`;
+  assert.deepEqual(trackerFehler(gut), []);
+  assert.deepEqual(trackerFehler(`${gut}<script src="/_astro/x.js"></script>`), []);
+  assert.equal(trackerFehler('<p>kein Skript</p>').length, 1);
+  assert.equal(trackerFehler(gut + gut).length, 1);
+  assert.equal(trackerFehler(gut.replace(WEBSITE_ID, 'e60d9ce5-6ee0-4bda-970e-5ece27f08880')).length, 1);
+  assert.equal(trackerFehler(gut.replace(' data-do-not-track="true"', '')).length, 1);
+  assert.equal(trackerFehler(`${gut}<script src="https://www.googletagmanager.com/gtag/js"></script>`).length, 1);
+  assert.equal(trackerFehler(`${gut}<script src="//cdn.example.com/a.js"></script>`).length, 1);
+});
+
+test('Ereignisse: E-Mail-, LinkedIn- und Produktseiten-Links tragen data-umami-event', () => {
+  const inhalte = distInhalte();
+  for (const s of SEITEN) assert.deepEqual(linksOhneEreignis(readFileSync(datei(s), 'utf8')), [], s);
+  const kontakt = ereignisse(inhalte['kontakt/index.html']);
+  assert.ok(kontakt.includes('kontakt-email') && kontakt.includes('kontakt-linkedin'), kontakt.join(', '));
+  const index = readFileSync(join(import.meta.dirname, '..', 'src', 'pages', 'index.astro'), 'utf8');
+  assert.match(index, /<a href=\{firmenhandys\.url\}[^>]*data-umami-event="trainingsvorlagen-produktseite"/);
+  if (landingOeffentlich(readFileSync(join(import.meta.dirname, '..', 'src', 'data', 'trainingsvorlagen.ts'), 'utf8'))) {
+    assert.deepEqual(ereignisse(inhalte['index.html']).filter((e) => e === 'trainingsvorlagen-produktseite'), ['trainingsvorlagen-produktseite']);
+  }
+});
+
+test('Ereignis-Prüfung erkennt Fehler (Negativprobe)', () => {
+  assert.equal(linksOhneEreignis('<a href="mailto:hallo@michaelbanditt.de">x</a>').length, 1);
+  assert.equal(linksOhneEreignis('<a data-umami-event="kontakt-linkedin" href="mailto:hallo@michaelbanditt.de">x</a>').length, 1);
+  assert.equal(linksOhneEreignis('<a href="https://www.linkedin.com/in/michael-banditt/">x</a>').length, 1);
+  assert.equal(linksOhneEreignis(`<a href="${LANDING_URL}">x</a>`).length, 1);
+  assert.deepEqual(linksOhneEreignis('<a data-umami-event="kontakt-email" href="mailto:x@y.de">x</a><a href="/kontakt">k</a>'), []);
+});
+
+test('Datenschutz: Abschnitt „Webanalyse mit Umami“ vollständig, keine Aussage „kein Tracking“ mehr', () => {
+  const html = readFileSync(datei('/datenschutz/'), 'utf8');
+  const text = sichtbar(abschnitt(html, '4. Webanalyse mit Umami')).replace(/\s+/g, ' ');
+  for (const t of [
+    'statistik.michaelbanditt.de', 'Hetzner Online GmbH in Deutschland', 'nicht an Dritte weitergegeben',
+    'keine Cookies', 'speichert keine IP-Adressen', 'Referrer-URL', 'Betriebssystem und Gerätetyp',
+    'Bildschirmgröße und eingestellte Sprache', 'Land, Region und Stadt', 'E-Mail-Adressen, das LinkedIn-Profil',
+    'Do Not Track', 'Art. 6 Abs. 1 lit. f DSGVO', 'bis zu 24 Monate gespeichert und danach gelöscht',
+  ]) assert.ok(text.includes(t), t);
+  const alles = sichtbar(html).replace(/\s+/g, ' ');
+  assert.doesNotMatch(alles, /kein Tracking|keine Analyse-Werkzeuge|täglich/);
+  assert.match(alles, /Für eine datensparsame Reichweitenmessung setze ich die selbst betriebene Software Umami ein \(siehe Abschnitt 4\)/);
+  const nummern = [...html.matchAll(/<h2>(\d+)\./g)].map((m) => Number(m[1]));
+  assert.deepEqual(nummern, nummern.map((_, i) => i + 1));
 });
