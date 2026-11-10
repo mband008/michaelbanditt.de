@@ -114,7 +114,7 @@ export function logAngabenFehler(html) {
   if (!/automatisch überschrieben/.test(text)) fehler.push('Überschreiben fehlt');
   if (!/bei jeder Aktualisierung der Website[^.]*gelöscht/.test(text)) fehler.push('Löschen bei Aktualisierung fehlt');
   if (/anonymisierte bzw\. gekürzte/.test(text)) fehler.push('alte Formulierung');
-  const frist = text.match(new RegExp(`\\b(?:${ZAHLWORT})\\s+(?:Kalender)?(?:Tagen?|Tage|Wochen?|Monaten?|Monate)\\b`, 'i'));
+  const frist = text.match(new RegExp(`\\b(?:${ZAHLWORT})\\s+(?:Kalender)?(?:Tag(?:e|en)?|Wochen?|Monat(?:e|en)?)\\b`, 'i'));
   if (frist) fehler.push(`feste Frist: ${frist[0]}`);
   return fehler;
 }
@@ -239,7 +239,7 @@ test('Log-Prüfung erkennt Fehler (Negativprobe)', () => {
   const gut = '<p>gekürzte IP-Adresse</p><p>werden automatisch überschrieben. Spätestens bei jeder Aktualisierung der Website (Neuinstallation) werden die Protokolle gelöscht.</p>';
   assert.deepEqual(logAngabenFehler(gut), []);
   assert.deepEqual(logAngabenFehler(`${gut}<p>in der Regel wenige Wochen</p>`), []);
-  for (const t of ['nach 7 Tagen gelöscht', 'für sieben Tage gespeichert', 'nach 14 Kalendertagen', 'höchstens vier Wochen', 'nach einem Monat']) {
+  for (const t of ['nach 7 Tagen gelöscht', 'für sieben Tage gespeichert', 'nach 14 Kalendertagen', 'höchstens vier Wochen', 'nach einem Monat', 'nach einem Tag', 'drei Monate lang']) {
     assert.equal(logAngabenFehler(`${gut}<p>${t}</p>`).length, 1, t);
   }
   assert.equal(logAngabenFehler('<p>anonymisierte bzw. gekürzte IP-Adresse</p>').length, 3);
