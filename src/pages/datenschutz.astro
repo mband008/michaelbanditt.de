@@ -46,23 +46,39 @@ export const pageStyle = "legal-page.css";
         DSGVO geschlossen. Die Domainverwaltung erfolgt über den Anbieter one.com.
       </p>
       <p>
-        Beim Aufruf der Website werden durch den Hosting-Anbieter automatisch Informationen
-        in sogenannten Server-Logfiles erfasst, die Ihr Browser übermittelt. Dies sind
-        insbesondere:
+        Der Server wird mit der Software Coolify betrieben. Anfragen nimmt zunächst ein
+        Reverse-Proxy (Traefik) entgegen und leitet sie an den Webserver (nginx) dieser
+        Website weiter. Der Reverse-Proxy schreibt keine Zugriffsprotokolle.
+      </p>
+      <p>
+        Der Webserver erfasst bei jedem Aufruf automatisch folgende Informationen in einem
+        Zugriffsprotokoll (Server-Logfile):
       </p>
       <ul>
-        <li>anonymisierte bzw. gekürzte IP-Adresse des anfragenden Geräts</li>
+        <li>gekürzte IP-Adresse des anfragenden Geräts (IPv4: der letzte Zahlenblock wird auf 0 gesetzt; IPv6: nur die ersten 32 Bit werden gespeichert)</li>
         <li>Datum und Uhrzeit des Zugriffs</li>
-        <li>Name und URL der abgerufenen Datei</li>
-        <li>übertragene Datenmenge sowie Meldung über erfolgreichen Abruf</li>
-        <li>verwendeter Browsertyp und Betriebssystem</li>
+        <li>angefragte Adresse (Methode, Pfad und Protokoll der Anfrage)</li>
+        <li>HTTP-Statuscode (z. B. erfolgreicher Abruf oder Fehler)</li>
+        <li>übertragene Datenmenge</li>
         <li>die zuvor besuchte Seite (Referrer-URL)</li>
+        <li>verwendeter Browsertyp und Betriebssystem (User-Agent)</li>
       </ul>
       <p>
+        Die vollständige IP-Adresse wird nur kurzzeitig für den Verbindungsaufbau verarbeitet
+        und nicht gespeichert. Die Protokolldaten werden nicht mit anderen Daten
+        zusammengeführt; eine Profilbildung findet nicht statt.
+      </p>
+      <p>
+        Die Protokolle liegen im Container des Webservers und werden automatisch
+        überschrieben, sobald sie eine Größe von 3 × 10 MB erreichen. Wie lange das dauert,
+        hängt vom Seitenaufkommen ab; in der Regel sind es wenige Wochen. Spätestens bei jeder
+        Aktualisierung der Website (Neuinstallation) werden die Protokolle gelöscht. Eine feste
+        Speicherfrist gibt es darüber hinaus nicht.
+      </p>
+      <p>
         Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Das
-        berechtigte Interesse liegt in der technisch fehlerfreien Bereitstellung sowie der
-        Sicherheit und Stabilität der Website. Die Logfiles werden gelöscht, sobald sie für
-        diese Zwecke nicht mehr erforderlich sind.
+        berechtigte Interesse liegt in der technisch fehlerfreien Bereitstellung der Website,
+        der Fehlersuche sowie der Sicherheit und der Erkennung von Missbrauch.
       </p>
 
       <h2>4. Kontaktaufnahme</h2>

@@ -105,6 +105,20 @@ export function klebendeInlineElemente(html) {
   ].map((m) => body.slice(Math.max(0, m.index - 30), m.index + m[0].length + 20));
 }
 
+const ZAHLWORT = '\\d+|eine[nmr]?|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|vierzehn|dreißig|neunzig';
+
+export function logAngabenFehler(html) {
+  const text = sichtbar(html).replace(/\s+/g, ' ');
+  const fehler = [];
+  if (!/gekürzte IP-Adresse/.test(text)) fehler.push('gekürzte IP-Adresse fehlt');
+  if (!/automatisch überschrieben/.test(text)) fehler.push('Überschreiben fehlt');
+  if (!/bei jeder Aktualisierung der Website[^.]*gelöscht/.test(text)) fehler.push('Löschen bei Aktualisierung fehlt');
+  if (/anonymisierte bzw\. gekürzte/.test(text)) fehler.push('alte Formulierung');
+  const frist = text.match(new RegExp(`\\b(?:${ZAHLWORT})\\s+(?:Kalender)?(?:Tag(?:e|en)?|Wochen?|Monat(?:e|en)?)\\b`, 'i'));
+  if (frist) fehler.push(`feste Frist: ${frist[0]}`);
+  return fehler;
+}
+
 test('dist/ ist gebaut', () => {
   assert.ok(existsSync(DIST), 'dist/ fehlt – zuerst "npm run build" ausführen');
 });
@@ -213,6 +227,23 @@ test('Telefonnummer nur im Impressum, mit tel:-Link, alte Mobilnummer nirgends',
   assert.equal(impressum.split(`href="${TELEFON_LINK}"`).length - 1, 1);
   assert.deepEqual(seitenMitTelefon(inhalte), ['impressum/index.html']);
   assert.deepEqual(alteNummer(inhalte), []);
+});
+
+test('Datenschutz: Server-Logs mit gekürzter IP, Überschreiben/Löschen, keine feste Tagesfrist', () => {
+  const html = readFileSync(datei('/datenschutz/'), 'utf8');
+  assert.deepEqual(logAngabenFehler(html), []);
+  assert.match(sichtbar(html), /Stand: November 2026/);
+});
+
+test('Log-Prüfung erkennt Fehler (Negativprobe)', () => {
+  const gut = '<p>gekürzte IP-Adresse</p><p>werden automatisch überschrieben. Spätestens bei jeder Aktualisierung der Website (Neuinstallation) werden die Protokolle gelöscht.</p>';
+  assert.deepEqual(logAngabenFehler(gut), []);
+  assert.deepEqual(logAngabenFehler(`${gut}<p>in der Regel wenige Wochen</p>`), []);
+  for (const t of ['nach 7 Tagen gelöscht', 'für sieben Tage gespeichert', 'nach 14 Kalendertagen', 'höchstens vier Wochen', 'nach einem Monat', 'nach einem Tag', 'drei Monate lang']) {
+    assert.equal(logAngabenFehler(`${gut}<p>${t}</p>`).length, 1, t);
+  }
+  assert.equal(logAngabenFehler('<p>anonymisierte bzw. gekürzte IP-Adresse</p>').length, 3);
+  assert.equal(logAngabenFehler('<p>IP-Adresse des Geräts</p>').length, 3);
 });
 
 test('Telefon-Prüfung erkennt Fehler (Negativprobe)', () => {
