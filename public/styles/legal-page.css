@@ -86,4 +86,8 @@
   .legal-content {
     padding: 1.5rem;
   }
+
+  .legal-content h1 {
+    font-size: 1.6rem;
+  }
 }

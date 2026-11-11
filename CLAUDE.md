@@ -43,7 +43,8 @@ npm run dev          # dev server at localhost:4321
 npm run build        # production build to ./dist/ (gitignored)
 npm run preview      # serve the built ./dist/ locally
 npm run check        # astro check: TypeScript / Astro diagnostics
-npm test             # scripts/pruefen.mjs: checks the built ./dist/ (pages, sitemap, spacing, content rules below; run after build)
+npm test             # checks the built ./dist/ (run after build): scripts/pruefen.mjs (pages, sitemap, spacing, content rules below)
+                     # and scripts/pruefen-browser.mjs (no horizontal overflow at 320/360/390/1280 px; needs Chrome, skipped without)
 ```
 
 Astro 7. Dependencies are pinned to exact versions (`.npmrc`: `save-exact=true`).
