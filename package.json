@@ -12,7 +12,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
-    "test": "node scripts/pruefen.mjs"
+    "test": "node --test --test-concurrency=1 scripts/pruefen.mjs scripts/pruefen-browser.mjs"
   },
   "dependencies": {
     "@astrojs/check": "0.9.12",
@@ -21,5 +21,8 @@
     "@fontsource/space-grotesk": "5.2.10",
     "astro": "7.4.8",
     "typescript": "5.9.3"
+  },
+  "devDependencies": {
+    "playwright-core": "1.65.0"
   }
 }
