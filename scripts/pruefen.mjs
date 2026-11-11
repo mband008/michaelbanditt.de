@@ -83,8 +83,18 @@ export function alteErfahrungsangaben(inhalte) {
   return treffer(inhalte, /12\+\s*Jahre Erfahrung in Service|rund 12 Jahre Praxis/g);
 }
 
+// Counts URLs only; the privacy policy names the host as plain text (section 6) and is not a link.
 export function landingLinks(inhalte) {
-  return treffer(inhalte, new RegExp(LANDING.replaceAll('.', '\\.'), 'g'));
+  return treffer(inhalte, new RegExp(`https?://${LANDING.replaceAll('.', '\\.')}`, 'g'));
+}
+
+const DIGISTORE_HINWEIS = /Käufe über diese Seiten\s+wickelt die\s+Digistore24 GmbH ab/g;
+
+// The privacy policy has to name Digistore24 as the payment processor of the product pages.
+// That one sentence on that one page is exempt from the sales check; everything else is not.
+export function ohneDigistoreHinweis(inhalte) {
+  return Object.fromEntries(Object.entries(inhalte).map(([p, t]) =>
+    [p, p === 'datenschutz/index.html' ? t.replace(DIGISTORE_HINWEIS, ' ') : t]));
 }
 
 export function verkaufselemente(inhalte) {
@@ -248,10 +258,11 @@ test('Landingpage-Prüfung erkennt Fehler (Negativprobe)', () => {
   assert.throws(() => landingOeffentlich('nichts'));
   assert.equal(landingLinks({ 'index.html': `<a href="${LANDING_URL}">Zur Produktseite</a>` }).length, 1);
   assert.equal(landingLinks({ 'sitemap-0.xml': '<loc>https://firmenhandys.michaelbanditt.de/</loc>' }).length, 1);
+  assert.deepEqual(landingLinks({ 'datenschutz/index.html': '<p>derzeit firmenhandys.michaelbanditt.de. Diese Seiten</p>' }), []);
 });
 
 test('keine Preise, Kaufbuttons oder Offer-Daten', () => {
-  assert.deepEqual(verkaufselemente(distInhalte()), []);
+  assert.deepEqual(verkaufselemente(ohneDigistoreHinweis(distInhalte())), []);
 });
 
 test('Verkaufs-Prüfung erkennt Fehler (Negativprobe)', () => {
@@ -259,6 +270,10 @@ test('Verkaufs-Prüfung erkennt Fehler (Negativprobe)', () => {
     assert.equal(verkaufselemente({ 'x.html': `<p>${t}</p>` }).length >= 1, true, t);
   }
   assert.deepEqual(verkaufselemente({ 'x.html': '<p>Fragen zu einem gekauften Paket</p>' }), []);
+  const hinweis = '<p>Käufe über diese Seiten\n wickelt die Digistore24 GmbH ab; die Einzelheiten stehen dort.</p>';
+  assert.deepEqual(verkaufselemente(ohneDigistoreHinweis({ 'datenschutz/index.html': hinweis })), []);
+  assert.equal(verkaufselemente(ohneDigistoreHinweis({ 'index.html': hinweis })).length, 1);
+  assert.equal(verkaufselemente(ohneDigistoreHinweis({ 'datenschutz/index.html': `${hinweis}<a href="https://www.digistore24.com/">x</a>` })).length, 1);
 });
 
 test('Telefonnummer nur im Impressum, mit tel:-Link, alte Mobilnummer nirgends', () => {
@@ -347,4 +362,19 @@ test('Datenschutz: Abschnitt „Webanalyse mit Umami“ vollständig, keine Auss
   assert.match(alles, /Für eine datensparsame Reichweitenmessung setze ich die selbst betriebene Software Umami ein \(siehe Abschnitt 4\)/);
   const nummern = [...html.matchAll(/<h2>(\d+)\./g)].map((m) => Number(m[1]));
   assert.deepEqual(nummern, nummern.map((_, i) => i + 1));
+});
+
+test('Datenschutz: Proxy Caddy, Abschnitt „Externe Links und Produktseiten“ mit Hinweis auf eigene Produktseiten', () => {
+  const html = readFileSync(datei('/datenschutz/'), 'utf8');
+  const hosting = sichtbar(abschnitt(html, '3. Hosting und Server-Logfiles')).replace(/\s+/g, ' ');
+  assert.ok(hosting.includes('Reverse-Proxy (Caddy)'), 'Caddy');
+  assert.ok(hosting.includes('Der Reverse-Proxy schreibt keine Zugriffsprotokolle.'));
+  assert.doesNotMatch(Object.values(distInhalte()).join('\n'), /Traefik/i);
+  const links = sichtbar(abschnitt(html, '<h2>6. Externe Links und Produktseiten</h2>')).replace(/\s+/g, ' ');
+  for (const t of [
+    'LinkedIn Ireland Unlimited Company',
+    'Von dieser Website führen Links zu meinen eigenen Produktseiten, derzeit firmenhandys.michaelbanditt.de.',
+    'Diese Seiten betreibe ich selbst; sie haben eine eigene Datenschutzerklärung, die auf der jeweiligen Seite verlinkt ist.',
+    'Käufe über diese Seiten wickelt die Digistore24 GmbH ab; die Einzelheiten stehen dort.',
+  ]) assert.ok(links.includes(t), t);
 });
