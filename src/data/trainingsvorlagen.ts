@@ -16,6 +16,12 @@ export const firmenhandys: Trainingsvorlage = {
   url: 'https://firmenhandys.michaelbanditt.de/',
   landingOeffentlich: true,
   ereignis: 'trainingsvorlagen-produktseite',
+  bild: {
+    src: '/images/produktbild-firmenhandys-standard.webp',
+    alt: 'Produktbild der Stufe Standard: Deckblatt des Teilnehmerhefts, Fall 1 und die Fallübersicht als Seitenstapel',
+    breite: 480,
+    hoehe: 480,
+  },
 };
 
 export const anruferpruefung: Trainingsvorlage = {

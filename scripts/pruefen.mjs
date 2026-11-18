@@ -265,6 +265,29 @@ test('Produktkarten: Firmenhandys zuerst, Anruferprüfung danach', () => {
   assert.deepEqual(trainingsvorlagen.map((v) => v.url), [LANDING_URL, ANRUFER_URL]);
 });
 
+test('Produktkarten: jede Karte hat ein Bild mit Alt-Text, 480 × 480, vor dem Titel', () => {
+  const karten = produktkarten(readFileSync(datei('/'), 'utf8'));
+  const erwartet = {
+    [LANDING_URL]: ['produktbild-firmenhandys-standard.webp', 'Produktbild der Stufe Standard: '],
+    [ANRUFER_URL]: ['produktbild-anruferpruefung-komplett.webp', 'Produktbild der Stufe Komplett: '],
+  };
+  for (const [i, v] of trainingsvorlagen.entries()) {
+    const [datei_, altAnfang] = erwartet[v.url];
+    const img = karten[i].match(/<img\b[^>]*>/)?.[0] ?? '';
+    assert.ok(img.includes(`src="/images/${datei_}"`), `${v.url}: ${img}`);
+    assert.match(img, new RegExp(`alt="${altAnfang}[^"]+"`), v.url);
+    assert.match(img, /width="480" height="480"/, v.url);
+    assert.ok(karten[i].indexOf('<img') < karten[i].indexOf('<h3'), v.url);
+    assert.ok(existsSync(join(DIST, 'images', datei_)), datei_);
+  }
+});
+
+test('Trainingsvorlagen: Einleitung des Abschnitts', () => {
+  const html = readFileSync(datei('/'), 'utf8');
+  const kopf = sichtbar(html.slice(html.indexOf('id="trainingsvorlagen"'), html.indexOf('home-product-grid'))).replace(/\s+/g, ' ');
+  assert.ok(kopf.includes('Fertige Trainingsunterlagen für die Einarbeitung und Weiterbildung im Support: Übungsfälle für das Team, Lösungen und Bewertungsbogen für die Trainer.'), kopf);
+});
+
 test('Produktkarte Anruferprüfung: Titel, Link, Bild mit Alt-Text, Ereignis, keine unzulässigen Aussagen', () => {
   const karte = produktkarten(readFileSync(datei('/'), 'utf8')).find((k) => k.includes('Anruferprüfung am Helpdesk'));
   assert.ok(karte, 'Karte fehlt');
