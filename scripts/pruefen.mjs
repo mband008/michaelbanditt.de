@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { trainingsvorlagen } from '../src/data/trainingsvorlagen.ts';
 
 const DIST = join(import.meta.dirname, '..', 'dist');
 const SITE = 'https://michaelbanditt.de';
@@ -10,6 +11,9 @@ const SEITEN = ['/', '/ueber-mich/', '/kontakt/', '/impressum/', '/datenschutz/'
 const datei = (seite) => join(DIST, seite, 'index.html');
 const LANDING = 'firmenhandys.michaelbanditt.de';
 const LANDING_URL = 'https://firmenhandys.michaelbanditt.de/';
+const ANRUFER = 'anruferpruefung.michaelbanditt.de';
+const ANRUFER_URL = 'https://anruferpruefung.michaelbanditt.de/';
+const PRODUKTSEITEN = { [LANDING_URL]: 'trainingsvorlagen-produktseite', [ANRUFER_URL]: 'trainingsvorlagen-anruferpruefung' };
 const TELEFON = '+49 340 87117800';
 const TELEFON_LINK = 'tel:+4934087117800';
 const ALTE_NUMMER = '15778633668';
@@ -26,12 +30,6 @@ function textdateien(dir = DIST) {
 
 function distInhalte() {
   return Object.fromEntries(textdateien().map((p) => [relative(DIST, p), readFileSync(p, 'utf8')]));
-}
-
-export function landingOeffentlich(quelltext) {
-  const m = quelltext.match(/landingOeffentlich:\s*(true|false)/);
-  if (!m) throw new Error('landingOeffentlich nicht gefunden');
-  return m[1] === 'true';
 }
 
 const sichtbar = (html) =>
@@ -84,8 +82,16 @@ export function alteErfahrungsangaben(inhalte) {
 }
 
 // Counts URLs only; the privacy policy names the host as plain text (section 6) and is not a link.
-export function landingLinks(inhalte) {
-  return treffer(inhalte, new RegExp(`https?://${LANDING.replaceAll('.', '\\.')}`, 'g'));
+export function landingLinks(inhalte, host = LANDING) {
+  return treffer(inhalte, new RegExp(`https?://${host.replaceAll('.', '\\.')}`, 'g'));
+}
+
+export function produktkarten(html) {
+  return [...html.matchAll(/<article class="home-product-card"[\s\S]*?<\/article>/g)].map((m) => m[0]);
+}
+
+export function unzulaessigeProduktaussagen(html) {
+  return [...sichtbar(html).matchAll(/zertifiziert|BSI-konform|ISO\s*27001|auditsicher|NIS2|erprobt|TÜV/gi)].map((m) => m[0]);
 }
 
 const DIGISTORE_HINWEIS = /Käufe über diese Seiten\s+wickelt die\s+Digistore24 GmbH ab/g;
@@ -158,8 +164,7 @@ export function trackerFehler(html) {
 const SOLL_EREIGNIS = (href) =>
   href.startsWith('mailto:') ? 'kontakt-email'
     : /^https:\/\/(www\.)?linkedin\.com\//.test(href) ? 'kontakt-linkedin'
-      : href === LANDING_URL ? 'trainingsvorlagen-produktseite'
-        : null;
+      : PRODUKTSEITEN[href] ?? null;
 
 export function linksOhneEreignis(html) {
   return [...html.matchAll(/<a\b[^>]*>/g)].map((m) => m[0]).filter((a) => {
@@ -236,27 +241,55 @@ test('Erfahrungs-Prüfung erkennt Fehler (Negativprobe)', () => {
   assert.deepEqual(alteErfahrungsangaben({ 'x.html': '<p>12+</p><p>Jahre in der Prozessoptimierung</p>' }), []);
 });
 
-test('Produktkarte: Link auf die Landingpage passt zu landingOeffentlich', () => {
-  const oeffentlich = landingOeffentlich(readFileSync(join(import.meta.dirname, '..', 'src', 'data', 'trainingsvorlagen.ts'), 'utf8'));
+test('Produktkarten: Links auf die Landingpages passen zu landingOeffentlich', () => {
   const inhalte = distInhalte();
-  const links = landingLinks(inhalte);
   const start = inhalte['index.html'];
-  if (oeffentlich) {
-    assert.equal(links.length, 1, links.join('\n'));
-    assert.equal(start.split(`href="${LANDING_URL}"`).length - 1, 1);
-    assert.ok(!start.includes('home-product-status'));
-  } else {
-    assert.deepEqual(links, []);
-    assert.ok(start.includes('class="home-product-status"'));
-    assert.ok(start.includes('Die Produktseite wird in Kürze veröffentlicht.'));
+  const karten = produktkarten(start);
+  assert.equal(karten.length, trainingsvorlagen.length);
+  for (const [i, v] of trainingsvorlagen.entries()) {
+    const links = landingLinks(inhalte, new URL(v.url).host);
+    assert.ok(karten[i].includes(v.titel.replaceAll('&', '&amp;')), v.titel);
+    if (v.landingOeffentlich) {
+      assert.equal(links.length, 1, links.join('\n'));
+      assert.equal(start.split(`href="${v.url}"`).length - 1, 1);
+      assert.ok(!karten[i].includes('home-product-status'), v.titel);
+    } else {
+      assert.deepEqual(links, []);
+      assert.ok(karten[i].includes('class="home-product-status"'), v.titel);
+      assert.ok(karten[i].includes('Die Produktseite wird in Kürze veröffentlicht.'), v.titel);
+    }
   }
 });
 
+test('Produktkarten: Firmenhandys zuerst, Anruferprüfung danach', () => {
+  assert.deepEqual(trainingsvorlagen.map((v) => v.url), [LANDING_URL, ANRUFER_URL]);
+});
+
+test('Produktkarte Anruferprüfung: Titel, Link, Bild mit Alt-Text, Ereignis, keine unzulässigen Aussagen', () => {
+  const karte = produktkarten(readFileSync(datei('/'), 'utf8')).find((k) => k.includes('Anruferprüfung am Helpdesk'));
+  assert.ok(karte, 'Karte fehlt');
+  assert.match(karte, /<h3 class="home-product-title">Anruferprüfung am Helpdesk – Passwort- und MFA-Zurücksetzung<\/h3>/);
+  assert.match(karte, new RegExp(`<a href="${ANRUFER_URL}"[^>]*data-umami-event="trainingsvorlagen-anruferpruefung"`));
+  const img = karte.match(/<img\b[^>]*>/)?.[0] ?? '';
+  assert.match(img, /src="\/images\/produktbild-anruferpruefung-komplett\.webp"/);
+  assert.match(img, /alt="Produktbild der Stufe Komplett: [^"]+"/);
+  assert.match(img, /width="480" height="480"/);
+  assert.ok(existsSync(join(DIST, 'images', 'produktbild-anruferpruefung-komplett.webp')));
+  assert.deepEqual(unzulaessigeProduktaussagen(karte), []);
+});
+
+test('Prüfung unzulässiger Produktaussagen erkennt Fehler (Negativprobe)', () => {
+  for (const t of ['zertifiziert', 'BSI-konform', 'erfüllt ISO 27001', 'auditsicher', 'NIS2-konform', 'erprobt', 'TÜV®']) {
+    assert.equal(unzulaessigeProduktaussagen(`<article><p>${t}</p></article>`).length, 1, t);
+  }
+  assert.deepEqual(unzulaessigeProduktaussagen('<article><p>Keine Sicherheitsberatung</p></article>'), []);
+  assert.equal(produktkarten('<article class="home-product-card"><h3>A</h3></article><article class="home-product-card">B</article>').length, 2);
+});
+
 test('Landingpage-Prüfung erkennt Fehler (Negativprobe)', () => {
-  assert.equal(landingOeffentlich('landingOeffentlich: false,'), false);
-  assert.equal(landingOeffentlich('landingOeffentlich:true'), true);
-  assert.throws(() => landingOeffentlich('nichts'));
   assert.equal(landingLinks({ 'index.html': `<a href="${LANDING_URL}">Zur Produktseite</a>` }).length, 1);
+  assert.equal(landingLinks({ 'index.html': `<a href="${ANRUFER_URL}">Zur Produktseite</a>` }, ANRUFER).length, 1);
+  assert.deepEqual(landingLinks({ 'index.html': `<a href="${ANRUFER_URL}">Zur Produktseite</a>` }), []);
   assert.equal(landingLinks({ 'sitemap-0.xml': '<loc>https://firmenhandys.michaelbanditt.de/</loc>' }).length, 1);
   assert.deepEqual(landingLinks({ 'datenschutz/index.html': '<p>derzeit firmenhandys.michaelbanditt.de. Diese Seiten</p>' }), []);
 });
@@ -332,10 +365,10 @@ test('Ereignisse: E-Mail-, LinkedIn- und Produktseiten-Links tragen data-umami-e
   for (const s of SEITEN) assert.deepEqual(linksOhneEreignis(readFileSync(datei(s), 'utf8')), [], s);
   const kontakt = ereignisse(inhalte['kontakt/index.html']);
   assert.ok(kontakt.includes('kontakt-email') && kontakt.includes('kontakt-linkedin'), kontakt.join(', '));
-  const index = readFileSync(join(import.meta.dirname, '..', 'src', 'pages', 'index.astro'), 'utf8');
-  assert.match(index, /<a href=\{firmenhandys\.url\}[^>]*data-umami-event="trainingsvorlagen-produktseite"/);
-  if (landingOeffentlich(readFileSync(join(import.meta.dirname, '..', 'src', 'data', 'trainingsvorlagen.ts'), 'utf8'))) {
-    assert.deepEqual(ereignisse(inhalte['index.html']).filter((e) => e === 'trainingsvorlagen-produktseite'), ['trainingsvorlagen-produktseite']);
+  for (const v of trainingsvorlagen) {
+    assert.equal(v.ereignis, PRODUKTSEITEN[v.url], v.url);
+    const anzahl = v.landingOeffentlich ? 1 : 0;
+    assert.equal(ereignisse(inhalte['index.html']).filter((e) => e === v.ereignis).length, anzahl, v.ereignis);
   }
 });
 
@@ -344,6 +377,9 @@ test('Ereignis-Prüfung erkennt Fehler (Negativprobe)', () => {
   assert.equal(linksOhneEreignis('<a data-umami-event="kontakt-linkedin" href="mailto:hallo@michaelbanditt.de">x</a>').length, 1);
   assert.equal(linksOhneEreignis('<a href="https://www.linkedin.com/in/michael-banditt/">x</a>').length, 1);
   assert.equal(linksOhneEreignis(`<a href="${LANDING_URL}">x</a>`).length, 1);
+  assert.equal(linksOhneEreignis(`<a href="${ANRUFER_URL}">x</a>`).length, 1);
+  assert.equal(linksOhneEreignis(`<a href="${ANRUFER_URL}" data-umami-event="trainingsvorlagen-produktseite">x</a>`).length, 1);
+  assert.deepEqual(linksOhneEreignis(`<a href="${ANRUFER_URL}" data-umami-event="trainingsvorlagen-anruferpruefung">x</a>`), []);
   assert.deepEqual(linksOhneEreignis('<a data-umami-event="kontakt-email" href="mailto:x@y.de">x</a><a href="/kontakt">k</a>'), []);
 });
 

@@ -4,6 +4,8 @@ export interface Trainingsvorlage {
   kennzeichnung: string;
   url: string;
   landingOeffentlich: boolean;
+  ereignis: string;
+  bild?: { src: string; alt: string; breite: number; hoehe: number };
 }
 
 export const firmenhandys: Trainingsvorlage = {
@@ -13,4 +15,23 @@ export const firmenhandys: Trainingsvorlage = {
   kennzeichnung: 'Szenarien auf Basis aktueller Herstellerdokumentation, nicht am Gerät getestet.',
   url: 'https://firmenhandys.michaelbanditt.de/',
   landingOeffentlich: true,
+  ereignis: 'trainingsvorlagen-produktseite',
 };
+
+export const anruferpruefung: Trainingsvorlage = {
+  titel: 'Anruferprüfung am Helpdesk – Passwort- und MFA-Zurücksetzung',
+  kurztext:
+    'Helpdesk-Teams üben im Rollenspiel, Anrufende zu prüfen, bevor sie ein Passwort oder einen zweiten Faktor zurücksetzen.',
+  kennzeichnung: 'Szenarien, Personen und Firmen sind erfunden. Keine Sicherheitsberatung und keine Risikoanalyse.',
+  url: 'https://anruferpruefung.michaelbanditt.de/',
+  landingOeffentlich: true,
+  ereignis: 'trainingsvorlagen-anruferpruefung',
+  bild: {
+    src: '/images/produktbild-anruferpruefung-komplett.webp',
+    alt: 'Produktbild der Stufe Komplett: Deckblatt der Anruferkarten, Karte 1 und die Arbeitsplatzkarte als Seitenstapel',
+    breite: 480,
+    hoehe: 480,
+  },
+};
+
+export const trainingsvorlagen: Trainingsvorlage[] = [firmenhandys, anruferpruefung];
