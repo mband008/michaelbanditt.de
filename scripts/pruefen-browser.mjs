@@ -96,3 +96,21 @@ for (const breite of BREITEN) {
     assert.deepEqual(ueberlauf, []);
   });
 }
+
+test('Browser 1440 px: Produktkarten gleich hoch, Knöpfe auf einer Linie', { skip: ohneBrowser }, async () => {
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  await context.route('**/*', (route) => (route.request().url().startsWith(server.url) ? route.continue() : route.abort()));
+  const page = await context.newPage();
+  await page.goto(server.url + '/', { waitUntil: 'load' });
+  await page.evaluate(() => document.fonts.ready);
+  const karten = await page.evaluate(() => [...document.querySelectorAll('.home-product-card')].map((k) => {
+    const r = k.getBoundingClientRect();
+    const knopf = k.querySelector('.cta-button').getBoundingClientRect();
+    return { top: Math.round(r.top), hoehe: Math.round(r.height), knopfUnten: Math.round(knopf.bottom) };
+  }));
+  await context.close();
+  assert.equal(karten.length, 2);
+  assert.equal(karten[0].top, karten[1].top, JSON.stringify(karten));
+  assert.equal(karten[0].hoehe, karten[1].hoehe, JSON.stringify(karten));
+  assert.equal(karten[0].knopfUnten, karten[1].knopfUnten, JSON.stringify(karten));
+});
