@@ -292,6 +292,7 @@ test('Landingpage-Prüfung erkennt Fehler (Negativprobe)', () => {
   assert.deepEqual(landingLinks({ 'index.html': `<a href="${ANRUFER_URL}">Zur Produktseite</a>` }), []);
   assert.equal(landingLinks({ 'sitemap-0.xml': '<loc>https://firmenhandys.michaelbanditt.de/</loc>' }).length, 1);
   assert.deepEqual(landingLinks({ 'datenschutz/index.html': '<p>derzeit firmenhandys.michaelbanditt.de. Diese Seiten</p>' }), []);
+  assert.deepEqual(landingLinks({ 'datenschutz/index.html': '<p>und anruferpruefung.michaelbanditt.de. Diese Seiten</p>' }, ANRUFER), []);
 });
 
 test('keine Preise, Kaufbuttons oder Offer-Daten', () => {
@@ -409,7 +410,7 @@ test('Datenschutz: Proxy Caddy, Abschnitt „Externe Links und Produktseiten“ 
   const links = sichtbar(abschnitt(html, '<h2>6. Externe Links und Produktseiten</h2>')).replace(/\s+/g, ' ');
   for (const t of [
     'LinkedIn Ireland Unlimited Company',
-    'Von dieser Website führen Links zu meinen eigenen Produktseiten, derzeit firmenhandys.michaelbanditt.de.',
+    'Von dieser Website führen Links zu meinen eigenen Produktseiten, derzeit firmenhandys.michaelbanditt.de und anruferpruefung.michaelbanditt.de.',
     'Diese Seiten betreibe ich selbst; sie haben eine eigene Datenschutzerklärung, die auf der jeweiligen Seite verlinkt ist.',
     'Käufe über diese Seiten wickelt die Digistore24 GmbH ab; die Einzelheiten stehen dort.',
   ]) assert.ok(links.includes(t), t);
