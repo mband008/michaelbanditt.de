@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { Image } from 'astro:assets';
 import portraitHeadshot from '../assets/portrait-headshot.png';
-import { firmenhandys } from '../data/trainingsvorlagen';
+import { trainingsvorlagen } from '../data/trainingsvorlagen';
 
 const title = "Michael Banditt – Trainer für IT-Support und Trainingsvorlagen";
 const description = "Michael Banditt, Trainer für Erwachsenenbildung mit Schwerpunkt IT-Support. Trainingsvorlagen mit Übungsfällen, Lösungen und Bewertungsbogen für Supportteams.";
@@ -75,21 +75,35 @@ const pageStyle = "home-page.css";
         <span class="section-eyebrow">Trainingsvorlagen</span>
         <h2>Übungsfälle für IT-Supportteams</h2>
         <p>
-          Fertige Trainingsunterlagen für die Einarbeitung und Weiterbildung im Support.
-          Teilnehmende arbeiten am Ticket, Trainer erhalten die verdeckten Befunde, einen
-          Lösungsweg und einen Bewertungsbogen.
+          Fertige Trainingsunterlagen für die Einarbeitung und Weiterbildung im Support:
+          Übungsfälle für das Team, Lösungen und Bewertungsbogen für die Trainer.
         </p>
       </div>
 
-      <article class="home-product-card">
-        {!firmenhandys.landingOeffentlich && <span class="home-product-status">Vorschau</span>}
-        <h3 class="home-product-title">{firmenhandys.titel}</h3>
-        <p>{firmenhandys.kurztext}</p>
-        <p class="home-product-note">{firmenhandys.kennzeichnung}</p>
-        {firmenhandys.landingOeffentlich
-          ? <a href={firmenhandys.url} class="cta-button" data-umami-event="trainingsvorlagen-produktseite">Zur Produktseite</a>
-          : <p class="home-product-pending">Die Produktseite wird in Kürze veröffentlicht.</p>}
-      </article>
+      <div class="home-product-grid">
+        {trainingsvorlagen.map((vorlage) => (
+          <article class="home-product-card">
+            {vorlage.bild && (
+              <img
+                src={vorlage.bild.src}
+                alt={vorlage.bild.alt}
+                width={vorlage.bild.breite}
+                height={vorlage.bild.hoehe}
+                class="home-product-image"
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+            {!vorlage.landingOeffentlich && <span class="home-product-status">Vorschau</span>}
+            <h3 class="home-product-title">{vorlage.titel}</h3>
+            <p>{vorlage.kurztext}</p>
+            <p class="home-product-note">{vorlage.kennzeichnung}</p>
+            {vorlage.landingOeffentlich
+              ? <a href={vorlage.url} class="cta-button" data-umami-event={vorlage.ereignis}>Zur Produktseite</a>
+              : <p class="home-product-pending">Die Produktseite wird in Kürze veröffentlicht.</p>}
+          </article>
+        ))}
+      </div>
     </section>
 
     <section class="section-block">
